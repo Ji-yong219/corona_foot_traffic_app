@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">충북 코로나 동선 앱</string>
+    <string name="title_home">Home</string>
+    <string name="title_location">Location</string>
+    <string name="title_data">Data</string>
+    <string name="title_setting">Setting</string>
+
+    <string name="permission_rationale">Location permission is needed for core functionality</string>
+    <string name="permission_denied_explanation">Permission was denied, but is needed for core</string>
+    <string name="ok">OK</string>
+    <string name="settings">Settings</string>
+    <string name="request_location_updates">Request location updates</string>
+    <string name="remove_location_updates">Remove location updates</string>
+    <string name="location_updated">Location Updated: %1$s</string>
+</resources>
