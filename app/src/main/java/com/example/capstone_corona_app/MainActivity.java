@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements
 
 
             if (!checkPermissions()) {
-//                requestPermissions();
+                requestPermissions();
             } else {
                 mService.requestLocationUpdates();
             }
