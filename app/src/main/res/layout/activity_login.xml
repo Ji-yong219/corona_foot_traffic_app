@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context="com.example.capstone_corona_app.MainActivity">
+
     <EditText
         android:id="@+id/et_pass"
         android:layout_width="wrap_content"
@@ -24,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="300dp"
+        android:layout_marginTop="250dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="아이디"
@@ -32,24 +33,36 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="로그인"
-        app:layout_constraintEnd_toEndOf="@+id/et_pass"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/et_pass"
-        app:layout_constraintTop_toBottomOf="@+id/et_pass" />
-    <Button
-        android:id="@+id/btn_register"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="회원가입"
-        app:layout_constraintEnd_toEndOf="@+id/btn_login"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/btn_login"
-        app:layout_constraintTop_toBottomOf="@+id/btn_login" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="350dp"
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/et_pass">
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:text="로그인"
+            android:layout_margin="15dp"
+            app:layout_constraintEnd_toEndOf="@+id/et_pass"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/et_pass"
+            app:layout_constraintTop_toBottomOf="@+id/et_pass" />
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:text="회원가입"
+            android:layout_margin="15dp"
+            app:layout_constraintEnd_toEndOf="@+id/btn_login"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/btn_login"
+            app:layout_constraintTop_toBottomOf="@+id/btn_login" />
+    </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
