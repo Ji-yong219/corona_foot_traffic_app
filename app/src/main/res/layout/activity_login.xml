@@ -35,6 +35,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/login_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
@@ -45,9 +46,10 @@
         <Button
             android:id="@+id/btn_login"
             android:layout_width="90dp"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="로그인"
             android:layout_margin="15dp"
+            android:background="@drawable/button_round"
             app:layout_constraintEnd_toEndOf="@+id/et_pass"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/et_pass"
@@ -55,9 +57,10 @@
         <Button
             android:id="@+id/btn_register"
             android:layout_width="90dp"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="회원가입"
             android:layout_margin="15dp"
+            android:background="@drawable/button_round"
             app:layout_constraintEnd_toEndOf="@+id/btn_login"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/btn_login"
