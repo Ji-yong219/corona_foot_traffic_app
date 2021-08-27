@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,9 +43,13 @@ public class LoginActivity extends AppCompatActivity{
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i("ㅎ", "ㄹ로그인 눌렀따/.");
                 final String userID=et_id.getText().toString();
                 String userPass=et_pass.getText().toString();
 
+                setContentView(R.layout.activity_main);
+
+                /*
 
                 Response.Listener<String> responseListener=new Response.Listener<String>() {
                     @Override
@@ -76,6 +81,8 @@ public class LoginActivity extends AppCompatActivity{
                 LoginRequest loginRequest=new LoginRequest(userID,userPass,responseListener);
                 RequestQueue queue= Volley.newRequestQueue(LoginActivity.this);
                 queue.add(loginRequest);
+
+                 */
             }
         });
     }

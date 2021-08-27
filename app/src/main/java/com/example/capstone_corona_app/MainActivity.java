@@ -105,17 +105,28 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        myReceiver = new MyReceiver();
-//        setContentView(R.layout.activity_main);
-        setContentView(R.layout.activity_login);
-
         // Check that the user hasn't revoked permissions by going to Settings.
         if (Utils.requestingLocationUpdates(this)) {
             if (!checkPermissions()) {
                 requestPermissions();
+                Log.i("권한", "GPS 권한 없었음");
+            }
+            else{
+                Log.i("권한", "GPS 권한 있었음");
             }
         }
+        
+        super.onCreate(savedInstanceState);
+
+
+        myReceiver = new MyReceiver();
+//        setContentView(R.layout.activity_main);
+        
+        // 로그인 액티비티 시작
+        setContentView(R.layout.activity_login);
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
