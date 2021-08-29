@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
 
+        // 메인 액티비티 시작
         setContentView(R.layout.activity_main);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
