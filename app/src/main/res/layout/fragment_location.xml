@@ -57,7 +57,7 @@
                         android:layout_marginBottom="10dp"
                         android:layout_marginLeft="20dp"
                         android:layout_centerInParent="true"
-                        android:text="00/00부터 00/00까지\n기록된 위치 정보를 확인합니다."
+                        android:text="실시간 확진자 방문 장소 표시"
                         android:textSize="22dp"
                         android:textColor="#0c0c0c" />
 
@@ -67,8 +67,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_centerInParent="true"
-                        android:text="# 14일이 지난 위치 정보는 삭제되어 나타나지 않습니다."
-                        android:textSize="13dp"
+                        android:text="※ 방역처리 완료 시 확진자 위치 자동 삭제"
+                        android:textSize="14dp"
                         android:textColor="#ab0c0c" />
 
                     <fragment

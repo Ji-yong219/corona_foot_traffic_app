@@ -63,7 +63,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
 
         final TextView mapTextView = root.findViewById(R.id.mapTextView);
 
-        mapTextView.setText( locationViewModel.getMapText()+"기록된 위치 정보를 확인합니다." );
+//        mapTextView.setText( locationViewModel.getMapText()+"기록된 위치 정보를 확인합니다." );
 
 
 

@@ -1,6 +1,5 @@
-package com.example.capstone_corona_app.ui.home;
+package com.example.capstone_corona_app.ui.path_history;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +19,6 @@ import com.example.capstone_corona_app.MainActivity;
 import com.example.capstone_corona_app.R;
 import com.example.capstone_corona_app.ui.location.LocationViewModel;
 import com.naver.maps.geometry.LatLng;
-import com.naver.maps.geometry.LatLngBounds;
-import com.naver.maps.map.CameraUpdate;
-import com.naver.maps.map.overlay.Marker;
-import com.naver.maps.map.overlay.PathOverlay;
-import com.naver.maps.map.util.MarkerIcons;
 import com.opencsv.CSVReader;
 
 import java.io.BufferedReader;
@@ -32,9 +26,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment {
+public class PathHistoryFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
+    private PathHistoryViewModel pathHistoryViewModel;
     private LocationViewModel locationViewModel;
     private TextView contactText;
     private ImageView emoticon;
@@ -43,15 +37,15 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        pathHistoryViewModel =
+                ViewModelProviders.of(this).get(PathHistoryViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_path_history, container, false);
 
         locationViewModel =
                 ViewModelProviders.of(this).get(LocationViewModel.class);
 
-        final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(this, new Observer<String>() {
+        final TextView textView = root.findViewById(R.id.text_path_history);
+        pathHistoryViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
