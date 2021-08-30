@@ -297,12 +297,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/capstone_corona_app/ui/location/LocationViewModel.java</url>
-          <line>44</line>
+          <line>45</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/capstone_corona_app/ui/location/LocationFragment.java</url>
-          <line>123</line>
+          <line>144</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>

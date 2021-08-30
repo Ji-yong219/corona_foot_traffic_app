@@ -53,6 +53,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
     ArrayList<PathOverlay> path_arr = new ArrayList<PathOverlay>();
     ArrayList<Marker> marker_arr = new ArrayList<>();
 
+    ImageView imageview = null;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -89,19 +90,39 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
         btnDateViewY.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                MainActivity.removeAgoGPS();
-                dateView.setText( locationViewModel.getDate(-1) );
-                String date = (String) dateView.getText();
-                setRoute(naverMap, date);
+                String date_result = (String) locationViewModel.getDate(-1);
+                if(date_result.equals("-1")){
+                    btnDateViewY.setImageResource(R.drawable.arrow_left_gray);
+                }
+                else{
+                    btnDateViewY.setImageResource(R.drawable.arrow_left);
+
+                    MainActivity.removeAgoGPS();
+                    dateView.setText( date_result );
+                    String date = (String) dateView.getText();
+                    setRoute(naverMap, date);
+                }
+                btnDateViewT.setImageResource(R.drawable.arrow_right);
             }
         });
 
         btnDateViewT.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                dateView.setText( locationViewModel.getDate(1) );
-                String date = (String) dateView.getText();
-                setRoute(naverMap, date);
+                String date_result = (String) locationViewModel.getDate(1);
+
+                if(date_result.equals("1")){
+                    btnDateViewT.setImageResource(R.drawable.arrow_right_gray);
+                }
+                else{
+                    btnDateViewT.setImageResource(R.drawable.arrow_right);
+
+                    MainActivity.removeAgoGPS();
+                    dateView.setText( date_result );
+                    String date = (String) dateView.getText();
+                    setRoute(naverMap, date);
+                }
+                btnDateViewY.setImageResource(R.drawable.arrow_left);
             }
         });
 

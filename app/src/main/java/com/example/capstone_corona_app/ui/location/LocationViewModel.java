@@ -18,6 +18,7 @@ public class LocationViewModel extends ViewModel {
     private MutableLiveData<String> mText;
     private MutableLiveData<String> mResult;
 
+
     public LocationViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is location fragment");
@@ -53,6 +54,7 @@ public class LocationViewModel extends ViewModel {
         return mResult;
     }
 
+
     public String getDate(int num){
         Date resultDate;
         Calendar today_cal = Calendar.getInstance();
@@ -74,15 +76,18 @@ public class LocationViewModel extends ViewModel {
         cal.add(Calendar.DATE, target_day);
 
         // 이동한 날짜가 현재보다 미래일 경우, 현재 값 반환
-
         if( today_cal.compareTo(cal) < 0){
             resultDate = today_cal.getTime();
             target_day = 0;
+
+            return "1";
         }
         else if( ago_cal.compareTo(cal) > -1){
             ago_cal.add(Calendar.DATE, 1);
             resultDate = ago_cal.getTime();
             target_day = -14;
+
+            return "-1";
         }
         else{
             resultDate = cal.getTime();

@@ -134,7 +134,7 @@
                         android:layout_width="0dp"
                         android:layout_height="30dp"
                         android:layout_weight="4"
-                        android:src="@drawable/arrow_right" />
+                        android:src="@drawable/arrow_right_gray" />
 
                 </LinearLayout>
 
