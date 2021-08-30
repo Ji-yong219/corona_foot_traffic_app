@@ -115,16 +115,16 @@ public class MainActivity extends AppCompatActivity implements
                 Log.i("권한", "GPS 권한 있었음");
             }
         }
-        
+
         super.onCreate(savedInstanceState);
 
 
         myReceiver = new MyReceiver();
         
         // 로그인 액티비티 시작
-        setContentView(R.layout.activity_login);
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+//        setContentView(R.layout.activity_login);
+//        Intent intent = new Intent(this, LoginActivity.class);
+//        startActivity(intent);
 
         // 메인 액티비티 시작
         setContentView(R.layout.activity_main);

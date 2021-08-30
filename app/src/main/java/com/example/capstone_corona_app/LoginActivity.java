@@ -43,11 +43,12 @@ public class LoginActivity extends AppCompatActivity{
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("ㅎ", "ㄹ로그인 눌렀따/.");
                 final String userID=et_id.getText().toString();
                 String userPass=et_pass.getText().toString();
 
                 setContentView(R.layout.activity_main);
+                Intent intent=new Intent(LoginActivity.this,MainActivity.class);
+                startActivity(intent);
 
                 /*
 
