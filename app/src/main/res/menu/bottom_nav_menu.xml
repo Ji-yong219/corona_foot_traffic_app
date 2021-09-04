@@ -3,12 +3,12 @@
 
     <item
         android:id="@+id/navigation_location"
-        android:icon="@drawable/my_path_before"
+        android:icon="@drawable/map_before"
         android:title="@string/title_location" />
 
     <item
         android:id="@+id/navigation_path_history"
-        android:icon="@drawable/map_before"
+        android:icon="@drawable/my_path_before"
         android:title="@string/title_path_history" />
 
     <item

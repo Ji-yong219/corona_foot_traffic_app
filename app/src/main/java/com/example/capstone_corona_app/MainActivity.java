@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements
 
 
         myReceiver = new MyReceiver();
-        
+
         // 로그인 액티비티 시작
 //        setContentView(R.layout.activity_login);
 //        Intent intent = new Intent(this, LoginActivity.class);
