@@ -48,9 +48,11 @@ public class ButtonAdapter extends BaseAdapter{
         else {
             //------------------------------------------------------------
             // 버튼을 생성하고 그것의 이름을 정합니다.
+            GridView.LayoutParams params = new GridView.LayoutParams(200, 200);
+
             button = new Button(context);
             button.setText(buttonNames[position]);
-            button.setLayoutParams(new GridView.LayoutParams(200, 200));
+            button.setLayoutParams(params);
             button.setTextSize(18);
             button.setBackgroundColor(button.getContext().getResources().getColor(R.color.colorButton));
 //            button.setCornerRadius
