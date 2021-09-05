@@ -106,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements
     public static myDBHelper myDBHelper;
     public static SQLiteDatabase sqlDB;
 
+    public int path_month;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Check that the user hasn't revoked permissions by going to Settings.
@@ -147,6 +149,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void onFragmentChange(int month){
+        path_month = month;
+
         PathHistoryTableFragment fragment = new PathHistoryTableFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
 
@@ -190,6 +194,10 @@ public class MainActivity extends AppCompatActivity implements
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
         super.onStop();
+    }
+
+    public int getPathMonth(){
+        return this.path_month;
     }
 
     /**

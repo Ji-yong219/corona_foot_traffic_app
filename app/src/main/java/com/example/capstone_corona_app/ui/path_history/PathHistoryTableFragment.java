@@ -2,6 +2,7 @@ package com.example.capstone_corona_app.ui.path_history;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.capstone_corona_app.ButtonAdapter;
+import com.example.capstone_corona_app.JsonReader;
 import com.example.capstone_corona_app.MainActivity;
 import com.example.capstone_corona_app.R;
 import com.example.capstone_corona_app.ui.location.LocationViewModel;
@@ -30,7 +32,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Handler;
 
 public class PathHistoryTableFragment extends Fragment {
 
@@ -55,26 +60,74 @@ public class PathHistoryTableFragment extends Fragment {
 
         tableLayout = (TableLayout) root.findViewById(R.id.tablelayout);
 
-        for(int i = 0 ; i < 5 ; i++) {
+        int month = ((MainActivity)getActivity()).getPathMonth();
+//            isContact()
+
+        ArrayList<String> user_LL_arr = getMonthRoutes(month);
+
+        for(int i = 0 ; i < user_LL_arr.size() ; i++) {
             TableRow tableRow = new TableRow(container.getContext());
             tableRow.setLayoutParams(new TableRow.LayoutParams(
                     TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT, 6
             ));
-//            tableRow.setWeightSum(6);
 
-            for (int j = 1; j <= 3; j++) {
-                TextView textView = new TextView(container.getContext());
-                textView.setText(String.valueOf("내용" + j));
+            String sUser_LL = user_LL_arr.get(i);
+            String[] aUser_LL = sUser_LL.split(";");
+
+
+            TextView textViewDate = new TextView(container.getContext());
+            String tempDate = aUser_LL[0].substring(4, 6) + "." + aUser_LL[0].substring(6, 8);
+            textViewDate.setText(tempDate);
+            textViewDate.setGravity(Gravity.CENTER);
+            textViewDate.setTextSize(18);
+            textViewDate.setBackgroundResource(R.drawable.table_border);
+
+            textViewDate.setLayoutParams(new TableRow.LayoutParams(
+                    0, TableRow.LayoutParams.WRAP_CONTENT, 1f
+            ));
+
+
+            TextView textViewTime = new TextView(container.getContext());
+            textViewTime.setText(String.valueOf(aUser_LL[1].substring(0, 4)));
+            textViewTime.setGravity(Gravity.CENTER);
+            textViewTime.setTextSize(18);
+            textViewTime.setBackgroundResource(R.drawable.table_border);
+
+            textViewTime.setLayoutParams(new TableRow.LayoutParams(
+                    0, TableRow.LayoutParams.WRAP_CONTENT, 2f
+            ));
+
+
+            TextView textViewPlace = new TextView(container.getContext());
+            String address = getAddressFromCoordinate(aUser_LL[2].split(",")[0], aUser_LL[2].split(",")[1]);
+            textViewPlace.setText(address);
+            textViewPlace.setGravity(Gravity.CENTER);
+            textViewPlace.setTextSize(18);
+            textViewPlace.setBackgroundResource(R.drawable.table_border);
+
+            textViewPlace.setLayoutParams(new TableRow.LayoutParams(
+                    0, TableRow.LayoutParams.WRAP_CONTENT, 3f
+            ));
+
+            tableRow.addView(textViewDate);
+            tableRow.addView(textViewTime);
+            tableRow.addView(textViewPlace);
+
+
+//
+//            for (int j = 0; j < aUser_LL.length ; j++) {
+//                TextView textView = new TextView(container.getContext());
+//                textView.setText(String.valueOf(aUser_LL[j]));
 //                textView.setGravity(Gravity.CENTER);
-                textView.setTextSize(24);
-                textView.setBackgroundResource(R.drawable.table_border);
-
-                textView.setLayoutParams(new TableRow.LayoutParams(
-                        0, TableRow.LayoutParams.WRAP_CONTENT, j
-                ));
-
-                tableRow.addView(textView);
-            }
+//                textView.setTextSize(18);
+//                textView.setBackgroundResource(R.drawable.table_border);
+//
+//                textView.setLayoutParams(new TableRow.LayoutParams(
+//                        0, TableRow.LayoutParams.WRAP_CONTENT, j+1
+//                ));
+//
+//                tableRow.addView(textView);
+//            }
 
             tableLayout.addView(tableRow);
         }
@@ -117,6 +170,30 @@ public class PathHistoryTableFragment extends Fragment {
 
         }
         return csv_arr;
+    }
+
+
+    public ArrayList<String> getMonthRoutes(int month){
+        ArrayList userRoutes = new ArrayList<>();
+        for(String item : MainActivity.selectAllGPS()){
+            userRoutes.add( item.split(";") );
+        }
+
+        ArrayList<String> LL_arr = new ArrayList<String>();
+
+        for(int j=0 ; j<userRoutes.size() ; j++){
+            String[] temp = (String[]) userRoutes.get(j);
+            Long lUserDate = Long.parseLong(temp[0]);
+            Double userLat = Double.parseDouble(temp[1]);
+            Double userLng = Double.parseDouble(temp[2]);
+
+            String sUserDate = String.valueOf(lUserDate);
+            String user_month = sUserDate.substring(4, 6);
+            if(Integer.parseInt(user_month) == month){
+                LL_arr.add(sUserDate.substring(0, 8)+";"+sUserDate.substring(8)+";"+userLat+","+userLng);
+            }
+        }
+        return LL_arr;
     }
 
     public boolean isContact(){
@@ -175,4 +252,61 @@ public class PathHistoryTableFragment extends Fragment {
 
         return false;
     }
+
+
+    public String getAddressFromCoordinate(String latitude, String longitude){
+
+
+        final JsonReader jsonReader = new JsonReader();
+
+        String key = "C1452070-7C02-3307-9F40-C9FAD0213169";
+
+        final String reverseGeocodeURL = "http://api.vworld.kr/req/address?"
+            + "service=address&request=getAddress&version=2.0&crs=epsg:4326&point="
+            + longitude + "," + latitude
+            + "&format=json"
+            + "&type=both&zipcode=true"
+            + "&simple=false&"
+            + "key="+key;
+
+        new Thread(){
+            public void run(){
+                String getJson = jsonReader.callURL(reverseGeocodeURL);
+                Map<String, Object> map = jsonReader.string2Map(getJson);
+
+                // 지도 결과 확인하기
+                ArrayList reverseGeocodeResultArr = (ArrayList)((HashMap< String, Object >) map.get("response")).get("result");
+                String parcel_address = "";
+                String road_address = "";
+                for (int counter = 0; counter < reverseGeocodeResultArr.size(); counter++) {
+                    HashMap < String, Object > tmp = (HashMap < String, Object > ) reverseGeocodeResultArr.get(counter);
+                    String level0 = (String)((HashMap < String, Object > ) tmp.get("structure")).get("level0");
+                    String level1 = (String)((HashMap < String, Object > ) tmp.get("structure")).get("level1");
+                    String level2 = (String)((HashMap < String, Object > ) tmp.get("structure")).get("level2");
+                    if (tmp.get("type").equals("parcel")) {
+                        parcel_address = (String) tmp.get("text");
+                        parcel_address = parcel_address.replace(level0, "").replace(level1, "").replace(level2, "").trim();
+                    } else {
+                        road_address = "도로 주소:" + (String) tmp.get("text");
+                        road_address = road_address.replace(level0, "").replace(level1, "").replace(level2, "").trim();
+                    }
+                }
+//                System.out.println("parcel_address = > " + parcel_address);
+//                System.out.println("road_address = > " + road_address);
+            }
+        }.start();
+
+//        String getJson = jsonReader.callURL(reverseGeocodeURL);
+//        Map<String, Object> map = jsonReader.string2Map(getJson);
+
+        return "gg";
+//        return getJson;
+    }
+
+//    Handler handler = new Handler(){
+//        public void handleMessage(Message msg){
+//            Bundle bun = msg.getData();
+//            String text = bun.getString("address");
+//        }
+//    }
 }
