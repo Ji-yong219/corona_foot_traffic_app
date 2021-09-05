@@ -2,6 +2,7 @@ package com.example.capstone_corona_app.ui.path_history;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,21 +54,30 @@ public class PathHistoryTableFragment extends Fragment {
 
 
         tableLayout = (TableLayout) root.findViewById(R.id.tablelayout);
-        TableRow tableRow = new TableRow(this.getActivity());
-        tableRow.setLayoutParams(new TableRow.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        ));
 
-        for(int i = 0 ; i < 3 ; i++){
-            TextView textView = new TextView(this.getActivity());
-            textView.setText(String.valueOf("내용"+i));
-            textView.setGravity(Gravity.CENTER);
-            textView.setTextSize(24);
-            tableRow.addView(textView);
+        for(int i = 0 ; i < 5 ; i++) {
+            TableRow tableRow = new TableRow(container.getContext());
+            tableRow.setLayoutParams(new TableRow.LayoutParams(
+                    TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT, 6
+            ));
+//            tableRow.setWeightSum(6);
+
+            for (int j = 1; j <= 3; j++) {
+                TextView textView = new TextView(container.getContext());
+                textView.setText(String.valueOf("내용" + j));
+//                textView.setGravity(Gravity.CENTER);
+                textView.setTextSize(24);
+                textView.setBackgroundResource(R.drawable.table_border);
+
+                textView.setLayoutParams(new TableRow.LayoutParams(
+                        0, TableRow.LayoutParams.WRAP_CONTENT, j
+                ));
+
+                tableRow.addView(textView);
+            }
+
+            tableLayout.addView(tableRow);
         }
-
-        tableLayout.addView(tableRow);
 
 //        Button btnCheckContact = (Button) root.findViewById(R.id.todayWriteButton);
 //        btnCheckContact.setOnClickListener(new View.OnClickListener() {
