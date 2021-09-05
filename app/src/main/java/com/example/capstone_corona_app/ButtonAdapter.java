@@ -2,10 +2,16 @@ package com.example.capstone_corona_app;
 
 
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
+import android.provider.CalendarContract;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.GridView;
+
+import androidx.annotation.RequiresApi;
 
 public class ButtonAdapter extends BaseAdapter{
     // context는 이 어댑터 객체를 정의하는 액티비티를 참조할 것입니다.
@@ -31,6 +37,7 @@ public class ButtonAdapter extends BaseAdapter{
         return position;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public View getView(int position, View convertView, ViewGroup parent) {
         Button button = null;
 
@@ -43,9 +50,14 @@ public class ButtonAdapter extends BaseAdapter{
             // 버튼을 생성하고 그것의 이름을 정합니다.
             button = new Button(context);
             button.setText(buttonNames[position]);
+            button.setLayoutParams(new GridView.LayoutParams(200, 200));
+            button.setTextSize(18);
+            button.setBackgroundColor(button.getContext().getResources().getColor(R.color.colorButton));
+//            button.setCornerRadius
 
             //------------------------------------------------------------
-            // 버튼 클릭에 대한 처리는 추후 구현 예정입니다.
+
+            button.setOnClickListener(new MonthButtonClickListener(context));
         }
 
         return button;

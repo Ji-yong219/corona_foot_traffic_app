@@ -15,13 +15,16 @@
         android:layout_marginBottom="50dp"
         android:fadingEdge="horizontal"
         android:orientation="vertical"
-        tools:context=".Fragment1">
+        tools:context=".Fragment2">
 
         <GridView
             android:id="@+id/gridViewPathHistory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:numColumns="3">
+            android:numColumns="3"
+            android:gravity="center"
+            android:horizontalSpacing="20dp"
+            android:verticalSpacing="30dp">
         </GridView>
     </LinearLayout>
 
