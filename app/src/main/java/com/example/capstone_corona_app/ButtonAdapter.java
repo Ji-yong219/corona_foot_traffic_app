@@ -53,7 +53,7 @@ public class ButtonAdapter extends BaseAdapter{
             button = new Button(context);
             button.setText(buttonNames[position]);
             button.setLayoutParams(params);
-            button.setTextSize(18);
+            button.setTextSize(24);
             button.setBackgroundColor(button.getContext().getResources().getColor(R.color.colorButton));
 //            button.setCornerRadius
 

@@ -1,5 +1,6 @@
 package com.example.capstone_corona_app.ui.path_history;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,6 +38,8 @@ public class PathHistoryFragment extends Fragment {
     private LinearLayout topLayout;
     private LinearLayout bottomLayout;
 
+    MainActivity activity;
+
 
     public String[] getMonthListWithNow(){
         List<String> monthList = new ArrayList<String>();
@@ -51,6 +54,20 @@ public class PathHistoryFragment extends Fragment {
         return monthList.toArray(new String[0]);
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        activity = (MainActivity)getActivity();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        activity = null;
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -58,55 +75,10 @@ public class PathHistoryFragment extends Fragment {
                 ViewModelProviders.of(this).get(PathHistoryViewModel.class);
         View root = inflater.inflate(R.layout.fragment_path_history, container, false);
 
-
-
         GridView gridViewPathHistory = (GridView) root.findViewById(R.id.gridViewPathHistory);
         ButtonAdapter buttonAdapter = new ButtonAdapter(getActivity(), getMonthListWithNow());
         gridViewPathHistory.setAdapter(buttonAdapter);
         super.onCreate(savedInstanceState);
-
-
-//        locationViewModel =
-//                ViewModelProviders.of(this).get(LocationViewModel.class);
-
-//        final TextView textView = root.findViewById(R.id.text_path_history);
-//        pathHistoryViewModel.getText().observe(this, new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
-
-
-//        final TextView mapTextView = root.findViewById(R.id.textView1);
-//        contactText = root.findViewById(R.id.textView2);
-//        emoticon = root.findViewById(R.id.emoticon);
-//        topLayout = root.findViewById(R.id.topLayout);
-//        bottomLayout = root.findViewById(R.id.bottomLayout);
-//
-//        mapTextView.setText( locationViewModel.getMapText() );
-//
-//
-//        Button btnCheckContact = (Button) root.findViewById(R.id.todayWriteButton);
-//        btnCheckContact.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(isContact()){
-//                    System.out.println("접촉");
-//                    contactText.setText( "확진자 동선과 겹치셨어요" );
-//                    topLayout.setBackgroundResource(R.drawable.round_border_sad_top);
-//                    bottomLayout.setBackgroundResource(R.drawable.round_border_sad_bottom);
-//                    emoticon.setImageResource(R.drawable.sadicon);
-//                }
-//                else{
-//                    System.out.println("안전");
-//                    contactText.setText( "안전하게 지내셨어요" );
-//                    topLayout.setBackgroundResource(R.drawable.round_border_smile_top);
-//                    bottomLayout.setBackgroundResource(R.drawable.round_border_smile_bottom);
-//                    emoticon.setImageResource(R.drawable.smileicon);
-//                }
-//            }
-//        });
 
         return root;
     }

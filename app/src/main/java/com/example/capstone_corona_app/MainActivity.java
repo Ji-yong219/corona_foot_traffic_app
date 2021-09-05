@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.capstone_corona_app.ui.path_history.PathHistoryTableFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -142,6 +143,12 @@ public class MainActivity extends AppCompatActivity implements
 
 
         myDBHelper = new myDBHelper(this);
+    }
+
+    public void onFragmentChange(int month){
+        PathHistoryTableFragment fragment = new PathHistoryTableFragment();
+        Log.i("main", month+"월 버튼 누름, fragment 바꾸자");
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
     }
 
     @Override

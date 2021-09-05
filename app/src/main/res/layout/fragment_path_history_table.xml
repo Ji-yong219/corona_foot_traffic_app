@@ -24,16 +24,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="재고등록일"
-                android:textSize="36dp"/>
-
+                android:text="날짜"
+                android:textSize="24dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="품명"
-                android:textSize="36dp"/>
+                android:text="시간"
+                android:textSize="24dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="장소"
+                android:textSize="24dp"/>
 
         </TableRow>
     </TableLayout>
