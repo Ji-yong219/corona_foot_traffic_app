@@ -14,6 +14,8 @@ import com.example.capstone_corona_app.ui.path_history.PathHistoryTableFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -141,14 +143,14 @@ public class MainActivity extends AppCompatActivity implements
         NavigationUI.setupWithNavController(navView, navController);
 
 
-
         myDBHelper = new myDBHelper(this);
     }
 
     public void onFragmentChange(int month){
         PathHistoryTableFragment fragment = new PathHistoryTableFragment();
-        Log.i("main", month+"월 버튼 누름, fragment 바꾸자");
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+
+        getSupportActionBar().setTitle(month+"월");
     }
 
     @Override

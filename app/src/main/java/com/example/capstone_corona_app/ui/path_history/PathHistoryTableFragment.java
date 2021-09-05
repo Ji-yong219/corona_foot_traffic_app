@@ -51,6 +51,7 @@ public class PathHistoryTableFragment extends Fragment {
 
         super.onCreate(savedInstanceState);
 
+
         tableLayout = (TableLayout) root.findViewById(R.id.tablelayout);
         TableRow tableRow = new TableRow(this.getActivity());
         tableRow.setLayoutParams(new TableRow.LayoutParams(
