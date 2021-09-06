@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -14,6 +15,7 @@ import com.example.capstone_corona_app.ui.path_history.PathHistoryTableFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
@@ -152,7 +154,24 @@ public class MainActivity extends AppCompatActivity implements
         path_month = month;
 
         PathHistoryTableFragment fragment = new PathHistoryTableFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+//        Bundle args = new Bundle();
+//        args.putInt(PathHistoryTableFragment.ARG_POSITION, position);
+//        fragment.setArguments(args);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        setContentView(R.layout.tablelayout);
+
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
+//        transaction.replace(R.id.tablelayout, fragment);
+//        transaction.addToBackStack(null);
+
+        // Commit the transaction
+//        transaction.commit();
+
+
+//        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
 
         getSupportActionBar().setTitle(month+"월");
     }
@@ -199,6 +218,21 @@ public class MainActivity extends AppCompatActivity implements
     public int getPathMonth(){
         return this.path_month;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("path_history_table_tag");
+        if(fragment != null)
+            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     /**
      * Returns the current state of the permissions needed.

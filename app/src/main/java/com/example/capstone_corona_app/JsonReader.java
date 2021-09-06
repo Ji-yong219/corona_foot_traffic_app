@@ -15,7 +15,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonReader {
     public String callURL(String myURL) {
-        System.out.println("Requeted URL:" + myURL);
         StringBuilder sb = new StringBuilder();
         URLConnection urlConn = null;
         InputStreamReader in = null; //error : Caused by: javax.net.ssl.SSLPeerUnverifiedException: Hostname not verified:
@@ -45,7 +44,6 @@ public class JsonReader {
         } catch (Exception e) {
             throw new RuntimeException("Exception URL:" + myURL, e);
         }
-        System.out.println(sb.toString());
         return sb.toString();
     }
     public Map < String, Object > string2Map(String json) {
@@ -53,7 +51,6 @@ public class JsonReader {
         Map < String, Object > map = null;
         try {
             map = mapper.readValue(json, Map.class);
-            System.out.println(map);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -49,9 +49,12 @@ public class PathHistoryTableFragment extends Fragment {
         pathHistoryViewModel =
                 ViewModelProviders.of(this).get(PathHistoryViewModel.class);
         View root = inflater.inflate(R.layout.fragment_path_history_table, container, false);
+        root.setTag("path_history_table_tag");
 
         super.onCreate(savedInstanceState);
 
+
+        ((MainActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true); // actionbar 좌측에 뒤로가기 화살표 표시
 
         tableLayout = (TableLayout) root.findViewById(R.id.tablelayout);
 
@@ -111,27 +114,6 @@ public class PathHistoryTableFragment extends Fragment {
 
             tableLayout.addView(tableRow);
         }
-
-//        Button btnCheckContact = (Button) root.findViewById(R.id.todayWriteButton);
-//        btnCheckContact.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(isContact()){
-//                    System.out.println("접촉");
-//                    contactText.setText( "확진자 동선과 겹치셨어요" );
-//                    topLayout.setBackgroundResource(R.drawable.round_border_sad_top);
-//                    bottomLayout.setBackgroundResource(R.drawable.round_border_sad_bottom);
-//                    emoticon.setImageResource(R.drawable.sadicon);
-//                }
-//                else{
-//                    System.out.println("안전");
-//                    contactText.setText( "안전하게 지내셨어요" );
-//                    topLayout.setBackgroundResource(R.drawable.round_border_smile_top);
-//                    bottomLayout.setBackgroundResource(R.drawable.round_border_smile_bottom);
-//                    emoticon.setImageResource(R.drawable.smileicon);
-//                }
-//            }
-//        });
 
         return root;
     }
