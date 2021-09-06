@@ -29,7 +29,7 @@
                 android:background="@drawable/table_border"
                 android:gravity="center"
                 android:text="날짜"
-                android:textSize="24dp"/>
+                android:textSize="20dp"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -38,7 +38,7 @@
                 android:background="@drawable/table_border"
                 android:gravity="center"
                 android:text="시간"
-                android:textSize="24dp"/>
+                android:textSize="20dp"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -47,7 +47,7 @@
                 android:background="@drawable/table_border"
                 android:gravity="center"
                 android:text="장소"
-                android:textSize="24dp"/>
+                android:textSize="20dp"/>
 
         </TableRow>
     </TableLayout>

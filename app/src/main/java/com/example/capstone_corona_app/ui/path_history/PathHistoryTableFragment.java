@@ -274,11 +274,11 @@ public class PathHistoryTableFragment extends Fragment {
                             parcel_address = (String) tmp.get("text");
                             parcel_address = parcel_address.replace(level0, "").replace(level1, "").replace(level2, "").trim();
                         } else {
-                            road_address = "도로 주소:" + (String) tmp.get("text");
+                            road_address = (String) tmp.get("text");
                             road_address = road_address.replace(level0, "").replace(level1, "").replace(level2, "").trim();
                         }
                     }
-                    return road_address;
+                    return parcel_address;
                 }
             };
 
@@ -288,43 +288,5 @@ public class PathHistoryTableFragment extends Fragment {
 
         }
         return result_address;
-    }
-}
-
-
-
-class callURLTask extends AsyncTask<String, Void, String>{
-    final JsonReader jsonReader = new JsonReader();
-
-    String key = "C1452070-7C02-3307-9F40-C9FAD0213169";
-
-    @Override
-    protected String doInBackground(String... strings){
-        String parcel_address = "";
-        String road_address = "";
-
-        String getJson = jsonReader.callURL(strings[0]);
-        Map<String, Object> map = jsonReader.string2Map(getJson);
-
-
-        // 지도 결과 확인하기
-        ArrayList reverseGeocodeResultArr = (ArrayList) ((HashMap<String, Object>) map.get("response")).get("result");
-
-        for (int counter = 0; counter < reverseGeocodeResultArr.size(); counter++) {
-            HashMap<String, Object> tmp = (HashMap<String, Object>) reverseGeocodeResultArr.get(counter);
-            String level0 = (String) ((HashMap<String, Object>) tmp.get("structure")).get("level0");
-            String level1 = (String) ((HashMap<String, Object>) tmp.get("structure")).get("level1");
-            String level2 = (String) ((HashMap<String, Object>) tmp.get("structure")).get("level2");
-
-            if (tmp.get("type").equals("parcel")) {
-                parcel_address = (String) tmp.get("text");
-                parcel_address = parcel_address.replace(level0, "").replace(level1, "").replace(level2, "").trim();
-            }
-            else {
-                road_address = "도로 주소:" + (String) tmp.get("text");
-                road_address = road_address.replace(level0, "").replace(level1, "").replace(level2, "").trim();
-            }
-        }
-        return road_address;
     }
 }
