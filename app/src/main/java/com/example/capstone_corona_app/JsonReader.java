@@ -24,20 +24,16 @@ public class JsonReader {
                 return true;
             }
         };
+
         HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+
         try {
             URL url = new URL(myURL);
-            System.out.println("1111111111111");
             urlConn = url.openConnection();
-            System.out.println("22222222222222");
             if (urlConn != null) urlConn.setReadTimeout(60 * 1000);
-            System.out.println("3333333333333333");
             if (urlConn != null && urlConn.getInputStream() != null) {
-                System.out.println("444444444444444");
                 in = new InputStreamReader(urlConn.getInputStream(), Charset.defaultCharset()); //charset 문자 집합의 인코딩을 사용해 urlConn.getInputStream을 문자스트림으로 변환 객체를 생성.
-                System.out.println("5555555555555555555");
                 BufferedReader bufferedReader = new BufferedReader( in ); //주어진 문자 입력 스트림 inputStream에 대해 기본 크기의 버퍼를 갖는 객체를 생성.
-                System.out.println("6666666666666666");
                 if (bufferedReader != null) {
                     int cp;
                     while ((cp = bufferedReader.read()) != -1) {

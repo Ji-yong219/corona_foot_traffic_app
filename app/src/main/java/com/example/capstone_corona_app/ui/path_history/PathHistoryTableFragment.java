@@ -1,14 +1,12 @@
 package com.example.capstone_corona_app.ui.path_history;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Message;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -19,7 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.capstone_corona_app.ButtonAdapter;
+import com.android.volley.toolbox.HttpResponse;
 import com.example.capstone_corona_app.JsonReader;
 import com.example.capstone_corona_app.MainActivity;
 import com.example.capstone_corona_app.R;
@@ -31,11 +29,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.logging.Handler;
 
 public class PathHistoryTableFragment extends Fragment {
 
@@ -60,12 +55,12 @@ public class PathHistoryTableFragment extends Fragment {
 
         tableLayout = (TableLayout) root.findViewById(R.id.tablelayout);
 
-        int month = ((MainActivity)getActivity()).getPathMonth();
+        int month = ((MainActivity) getActivity()).getPathMonth();
 //            isContact()
 
         ArrayList<String> user_LL_arr = getMonthRoutes(month);
 
-        for(int i = 0 ; i < user_LL_arr.size() ; i++) {
+        for (int i = 0; i < user_LL_arr.size(); i++) {
             TableRow tableRow = new TableRow(container.getContext());
             tableRow.setLayoutParams(new TableRow.LayoutParams(
                     TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT, 6
@@ -76,7 +71,7 @@ public class PathHistoryTableFragment extends Fragment {
 
 
             TextView textViewDate = new TextView(container.getContext());
-            String tempDate = aUser_LL[0].substring(4, 6) + "." + aUser_LL[0].substring(6, 8);
+            String tempDate = Integer.parseInt(aUser_LL[0].substring(4, 6)) + "." + Integer.parseInt(aUser_LL[0].substring(6, 8));
             textViewDate.setText(tempDate);
             textViewDate.setGravity(Gravity.CENTER);
             textViewDate.setTextSize(18);
@@ -88,7 +83,8 @@ public class PathHistoryTableFragment extends Fragment {
 
 
             TextView textViewTime = new TextView(container.getContext());
-            textViewTime.setText(String.valueOf(aUser_LL[1].substring(0, 4)));
+            String tempTime = String.valueOf(aUser_LL[1].substring(0, 2)) + ":" + String.valueOf(aUser_LL[1].substring(2, 4));
+            textViewTime.setText(tempTime);
             textViewTime.setGravity(Gravity.CENTER);
             textViewTime.setTextSize(18);
             textViewTime.setBackgroundResource(R.drawable.table_border);
@@ -112,22 +108,6 @@ public class PathHistoryTableFragment extends Fragment {
             tableRow.addView(textViewDate);
             tableRow.addView(textViewTime);
             tableRow.addView(textViewPlace);
-
-
-//
-//            for (int j = 0; j < aUser_LL.length ; j++) {
-//                TextView textView = new TextView(container.getContext());
-//                textView.setText(String.valueOf(aUser_LL[j]));
-//                textView.setGravity(Gravity.CENTER);
-//                textView.setTextSize(18);
-//                textView.setBackgroundResource(R.drawable.table_border);
-//
-//                textView.setLayoutParams(new TableRow.LayoutParams(
-//                        0, TableRow.LayoutParams.WRAP_CONTENT, j+1
-//                ));
-//
-//                tableRow.addView(textView);
-//            }
 
             tableLayout.addView(tableRow);
         }
@@ -155,7 +135,8 @@ public class PathHistoryTableFragment extends Fragment {
 
         return root;
     }
-    private ArrayList<String[]> getDataFromCSV(InputStreamReader target_csv){
+
+    private ArrayList<String[]> getDataFromCSV(InputStreamReader target_csv) {
         String[] nextLine = null;
         ArrayList<String[]> csv_arr = new ArrayList<String[]>();
 
@@ -173,15 +154,15 @@ public class PathHistoryTableFragment extends Fragment {
     }
 
 
-    public ArrayList<String> getMonthRoutes(int month){
+    public ArrayList<String> getMonthRoutes(int month) {
         ArrayList userRoutes = new ArrayList<>();
-        for(String item : MainActivity.selectAllGPS()){
-            userRoutes.add( item.split(";") );
+        for (String item : MainActivity.selectAllGPS()) {
+            userRoutes.add(item.split(";"));
         }
 
         ArrayList<String> LL_arr = new ArrayList<String>();
 
-        for(int j=0 ; j<userRoutes.size() ; j++){
+        for (int j = 0; j < userRoutes.size(); j++) {
             String[] temp = (String[]) userRoutes.get(j);
             Long lUserDate = Long.parseLong(temp[0]);
             Double userLat = Double.parseDouble(temp[1]);
@@ -189,27 +170,27 @@ public class PathHistoryTableFragment extends Fragment {
 
             String sUserDate = String.valueOf(lUserDate);
             String user_month = sUserDate.substring(4, 6);
-            if(Integer.parseInt(user_month) == month){
-                LL_arr.add(sUserDate.substring(0, 8)+";"+sUserDate.substring(8)+";"+userLat+","+userLng);
+            if (Integer.parseInt(user_month) == month) {
+                LL_arr.add(sUserDate.substring(0, 8) + ";" + sUserDate.substring(8) + ";" + userLat + "," + userLng);
             }
         }
         return LL_arr;
     }
 
-    public boolean isContact(){
+    public boolean isContact() {
         ArrayList userRoutes = new ArrayList<>();
-        for(String item : MainActivity.selectAllGPS()){
-            userRoutes.add( item.split(";") );
+        for (String item : MainActivity.selectAllGPS()) {
+            userRoutes.add(item.split(";"));
         }
 
         ArrayList<String[]> routes = new ArrayList<String[]>();
 
-        routes = getDataFromCSV( new InputStreamReader(getResources().openRawResource(R.raw.cb_routes)) );
+        routes = getDataFromCSV(new InputStreamReader(getResources().openRawResource(R.raw.cb_routes)));
 
         ArrayList<LatLng> LL_arr = new ArrayList<LatLng>();
 
 
-        for(int j=0 ; j<userRoutes.size() ; j++){
+        for (int j = 0; j < userRoutes.size(); j++) {
             String[] temp = (String[]) userRoutes.get(j);
             Long userDate = Long.parseLong(temp[0]);
             Double userLat = Double.parseDouble(temp[1]);
@@ -217,12 +198,12 @@ public class PathHistoryTableFragment extends Fragment {
 
 
             for (int i = 1; i < routes.size(); i++) {
-                if (routes.get(i)[5]!=null && !routes.get(i)[5].equals("")) {
-                    Long date = Long.parseLong( routes.get(i)[1]+routes.get(i)[2] );
-                    double venueLat = Double.valueOf( routes.get(i)[5] );
-                    double venueLng = Double.valueOf( routes.get(i)[6] );
+                if (routes.get(i)[5] != null && !routes.get(i)[5].equals("")) {
+                    Long date = Long.parseLong(routes.get(i)[1] + routes.get(i)[2]);
+                    double venueLat = Double.valueOf(routes.get(i)[5]);
+                    double venueLng = Double.valueOf(routes.get(i)[6]);
 
-                    if(date <= userDate){
+                    if (date <= userDate) {
                         double latDistance = Math.toRadians(userLat - venueLat);
                         double lngDistance = Math.toRadians(userLng - venueLng);
                         double a = (Math.sin(latDistance / 2) * Math.sin(latDistance / 2)) +
@@ -234,7 +215,7 @@ public class PathHistoryTableFragment extends Fragment {
                         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
                         double dist = 6371 * c;
-                        if (dist<0.05){ //(in km, you can use 0.1 for metres etc.)
+                        if (dist < 0.05) { //(in km, you can use 0.1 for metres etc.)
                             /* If it's within 10m, we assume we're not moving */
 
                             return true;
@@ -254,59 +235,96 @@ public class PathHistoryTableFragment extends Fragment {
     }
 
 
-    public String getAddressFromCoordinate(String latitude, String longitude){
-
-
+//    @SuppressLint("StaticFieldLeak")
+    public String getAddressFromCoordinate(String latitude, String longitude) {
         final JsonReader jsonReader = new JsonReader();
-
         String key = "C1452070-7C02-3307-9F40-C9FAD0213169";
+        String result_address = "";
 
         final String reverseGeocodeURL = "http://api.vworld.kr/req/address?"
-            + "service=address&request=getAddress&version=2.0&crs=epsg:4326&point="
-            + longitude + "," + latitude
-            + "&format=json"
-            + "&type=both&zipcode=true"
-            + "&simple=false&"
-            + "key="+key;
+                + "service=address&request=getAddress&version=2.0&crs=epsg:4326&point="
+                + longitude + "," + latitude
+                + "&format=json"
+                + "&type=both&zipcode=true"
+                + "&simple=false&"
+                + "key=" + key;
 
-        new Thread(){
-            public void run(){
-                String getJson = jsonReader.callURL(reverseGeocodeURL);
-                Map<String, Object> map = jsonReader.string2Map(getJson);
 
-                // 지도 결과 확인하기
-                ArrayList reverseGeocodeResultArr = (ArrayList)((HashMap< String, Object >) map.get("response")).get("result");
-                String parcel_address = "";
-                String road_address = "";
-                for (int counter = 0; counter < reverseGeocodeResultArr.size(); counter++) {
-                    HashMap < String, Object > tmp = (HashMap < String, Object > ) reverseGeocodeResultArr.get(counter);
-                    String level0 = (String)((HashMap < String, Object > ) tmp.get("structure")).get("level0");
-                    String level1 = (String)((HashMap < String, Object > ) tmp.get("structure")).get("level1");
-                    String level2 = (String)((HashMap < String, Object > ) tmp.get("structure")).get("level2");
-                    if (tmp.get("type").equals("parcel")) {
-                        parcel_address = (String) tmp.get("text");
-                        parcel_address = parcel_address.replace(level0, "").replace(level1, "").replace(level2, "").trim();
-                    } else {
-                        road_address = "도로 주소:" + (String) tmp.get("text");
-                        road_address = road_address.replace(level0, "").replace(level1, "").replace(level2, "").trim();
+        try {
+            AsyncTask<String, Void, String> asyncTask = new AsyncTask<String, Void, String>() {
+                @Override
+                protected String doInBackground(String... url) {
+                    String parcel_address = "";
+                    String road_address = "";
+
+                    String getJson = jsonReader.callURL(url[0]);
+                    Map<String, Object> map = jsonReader.string2Map(getJson);
+
+
+                    // 지도 결과 확인하기
+                    ArrayList reverseGeocodeResultArr = (ArrayList) ((HashMap<String, Object>) map.get("response")).get("result");
+
+                    for (int counter = 0; counter < reverseGeocodeResultArr.size(); counter++) {
+                        HashMap<String, Object> tmp = (HashMap<String, Object>) reverseGeocodeResultArr.get(counter);
+                        String level0 = (String) ((HashMap<String, Object>) tmp.get("structure")).get("level0");
+                        String level1 = (String) ((HashMap<String, Object>) tmp.get("structure")).get("level1");
+                        String level2 = (String) ((HashMap<String, Object>) tmp.get("structure")).get("level2");
+
+                        if (tmp.get("type").equals("parcel")) {
+                            parcel_address = (String) tmp.get("text");
+                            parcel_address = parcel_address.replace(level0, "").replace(level1, "").replace(level2, "").trim();
+                        } else {
+                            road_address = "도로 주소:" + (String) tmp.get("text");
+                            road_address = road_address.replace(level0, "").replace(level1, "").replace(level2, "").trim();
+                        }
                     }
+                    return road_address;
                 }
-//                System.out.println("parcel_address = > " + parcel_address);
-//                System.out.println("road_address = > " + road_address);
-            }
-        }.start();
+            };
 
-//        String getJson = jsonReader.callURL(reverseGeocodeURL);
-//        Map<String, Object> map = jsonReader.string2Map(getJson);
+            result_address = asyncTask.execute(reverseGeocodeURL).get();
+        }
+        catch (Exception e) {
 
-        return "gg";
-//        return getJson;
+        }
+        return result_address;
     }
+}
 
-//    Handler handler = new Handler(){
-//        public void handleMessage(Message msg){
-//            Bundle bun = msg.getData();
-//            String text = bun.getString("address");
-//        }
-//    }
+
+
+class callURLTask extends AsyncTask<String, Void, String>{
+    final JsonReader jsonReader = new JsonReader();
+
+    String key = "C1452070-7C02-3307-9F40-C9FAD0213169";
+
+    @Override
+    protected String doInBackground(String... strings){
+        String parcel_address = "";
+        String road_address = "";
+
+        String getJson = jsonReader.callURL(strings[0]);
+        Map<String, Object> map = jsonReader.string2Map(getJson);
+
+
+        // 지도 결과 확인하기
+        ArrayList reverseGeocodeResultArr = (ArrayList) ((HashMap<String, Object>) map.get("response")).get("result");
+
+        for (int counter = 0; counter < reverseGeocodeResultArr.size(); counter++) {
+            HashMap<String, Object> tmp = (HashMap<String, Object>) reverseGeocodeResultArr.get(counter);
+            String level0 = (String) ((HashMap<String, Object>) tmp.get("structure")).get("level0");
+            String level1 = (String) ((HashMap<String, Object>) tmp.get("structure")).get("level1");
+            String level2 = (String) ((HashMap<String, Object>) tmp.get("structure")).get("level2");
+
+            if (tmp.get("type").equals("parcel")) {
+                parcel_address = (String) tmp.get("text");
+                parcel_address = parcel_address.replace(level0, "").replace(level1, "").replace(level2, "").trim();
+            }
+            else {
+                road_address = "도로 주소:" + (String) tmp.get("text");
+                road_address = road_address.replace(level0, "").replace(level1, "").replace(level2, "").trim();
+            }
+        }
+        return road_address;
+    }
 }
