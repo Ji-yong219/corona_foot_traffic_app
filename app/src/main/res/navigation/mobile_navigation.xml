@@ -15,7 +15,16 @@
         android:id="@+id/navigation_path_history"
         android:name="com.example.capstone_corona_app.ui.path_history.PathHistoryFragment"
         android:label="@string/title_path_history"
-        tools:layout="@layout/fragment_path_history" />
+        tools:layout="@layout/fragment_path_history">
+        <action
+            android:id="@+id/action_path_history_to_path_history_table"
+            app:destination="@id/navigation_path_history_table"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_path_history_table"
+        android:name="com.example.capstone_corona_app.ui.path_history.PathHistoryTableFragment"
+        tools:layout="@layout/fragment_path_history_table"/>
 
     <fragment
         android:id="@+id/navigation_data"

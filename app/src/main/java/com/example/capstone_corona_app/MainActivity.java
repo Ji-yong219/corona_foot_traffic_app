@@ -152,28 +152,10 @@ public class MainActivity extends AppCompatActivity implements
 
     public void onFragmentChange(int month){
         path_month = month;
-
-        PathHistoryTableFragment fragment = new PathHistoryTableFragment();
-//        Bundle args = new Bundle();
-//        args.putInt(PathHistoryTableFragment.ARG_POSITION, position);
-//        fragment.setArguments(args);
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-        setContentView(R.layout.tablelayout);
-
-        // Replace whatever is in the fragment_container view with this fragment,
-        // and add the transaction to the back stack so the user can navigate back
-//        transaction.replace(R.id.tablelayout, fragment);
-//        transaction.addToBackStack(null);
-
-        // Commit the transaction
-//        transaction.commit();
-
-
-//        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-
         getSupportActionBar().setTitle(month+"월");
+
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController.navigate(R.id.action_path_history_to_path_history_table);
     }
 
     @Override
@@ -221,13 +203,15 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag("path_history_table_tag");
-        if(fragment != null)
-            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
 
         switch (item.getItemId()){
-            case android.R.id.home:
-                finish();
+            case android.R.id.home: // 뒤로가기 눌렀을 때
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                getSupportActionBar().setTitle("Path history");
+
+                NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+                navController.navigate(R.id.navigation_path_history);
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
