@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="확진자 현황"
+                android:text="간편 서비스"
                 android:textColor="#0c0c0c"
                 android:textSize="26dp"
                 android:textStyle="bold" />
