@@ -33,11 +33,17 @@ import org.jsoup.select.Elements;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PathHistoryTableFragment extends Fragment {
 
@@ -70,6 +76,8 @@ public class PathHistoryTableFragment extends Fragment {
 
         ArrayList<String> user_LL_arr = getMonthRoutes(month);
 
+
+        SimpleDateFormat fDate = new SimpleDateFormat("yyyy-MM-DD hh:mm:ss");
 
         for (int i = 0; i < user_LL_arr.size(); i++) {
             TableRow tableRow = new TableRow(container.getContext());
@@ -105,23 +113,90 @@ public class PathHistoryTableFragment extends Fragment {
             ));
 
 
-
             String sUserLatitude = aUser_LL[2].split(",")[0];
             String sUserLongitude = aUser_LL[2].split(",")[1];
 
             ArrayList<HashMap<String, String>> confirmPlacesCJ = getConfirmPlacesCheongJu();
 
+
             for(HashMap<String, String> place : confirmPlacesCJ){
+                String sOpenDate = place.get("open_date");
                 String sPlaceDate = place.get("date");
-                String sPlaceLatitude = place.get("coord").split(",")[0];
-                String sPlaceLongitude = place.get("coord").split(",")[1];
 
-                String startDateMonth = sPlaceDate.split("~")[0].trim().split(".")[0];
-                String startDateDate = sPlaceDate.split("~")[0].trim().split(".")[1];
+                Pattern pattern = Pattern.compile("\\d{1,2}.\\d{1,2}.\\([월화수목금토일]\\)");
+                Matcher matcher = pattern.matcher(sPlaceDate);
+
+                ArrayList<String> aPlaceDate = new ArrayList<String>();
+
+                boolean found = false;
+
+                while(matcher.find()){
+                    aPlaceDate.add( matcher.group() );
+                    found = true;
+                }
+                if(found){
+                    try {
+                        Date start = fDate.parse(
+                        sOpenDate.split("\\.")[0]
+                                +"-"+aPlaceDate.get(0).split("\\.")[0]
+                                +"-"+aPlaceDate.get(0).split("\\.")[1]
+                                +" "
+                                +"00:00:00"
+                        );
+                        String to = fDate.format(start);
+                        aPlaceDate.add( to );
+
+                        Date end = fDate.parse(
+                            sOpenDate.split("\\.")[0]
+                                    +"-"+aPlaceDate.get(1).split("\\.")[0]
+                                    +"-"+aPlaceDate.get(1).split("\\.")[1]
+                                    +" "
+                                    +"23:59:59"
+                        );
+
+                        to = fDate.format(end);
+                        aPlaceDate.add( to );
 
 
-                String endDateMonth = sPlaceDate.split("~")[1].trim().split(".")[0];
-                String endDateDate = sPlaceDate.split("~")[1].trim().split(".")[1];
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else{
+                    System.out.println("날짜 찾기 에러");
+                }
+
+                String sPlaceLatitude = place.get("coord").split(";")[0];
+                String sPlaceLongitude = place.get("coord").split(";")[1];
+
+                String sUserDate = aUser_LL[0].substring(0, 4)
+                    + "-"
+                    + aUser_LL[0].substring(4, 6)
+                    + "-"
+                    + aUser_LL[0].substring(6, 8)
+                    + " "
+                    + aUser_LL[1].substring(0, 2)
+                    + ":"
+                    + aUser_LL[1].substring(2, 4)
+                    + ":"
+                    + aUser_LL[1].substring(4, 6);
+
+                if( getValidDate(aPlaceDate.get(2), aPlaceDate.get(3), sUserDate) ){
+                    if(isContact(
+                            Double.parseDouble(sPlaceLatitude),
+                            Double.parseDouble(sPlaceLongitude),
+                            Double.parseDouble(sUserLatitude),
+                            Double.parseDouble(sUserLongitude)
+                    )){
+                        System.out.println("접촉");
+                    }
+                    else{
+                        System.out.println("비접촉");
+                    }
+                }
+                else{
+                    System.out.println("비접촉");
+                }
             }
 
             TextView textViewPlace = new TextView(container.getContext());
@@ -150,18 +225,17 @@ public class PathHistoryTableFragment extends Fragment {
         String sPlaceData = getSoupFromUrl(url);
         String[] aPlaceData = sPlaceData.split("<newline>");
 
-        ArrayList<HashMap<String, String>> aPlacesCoord = null;
+        ArrayList<HashMap<String, String>> aPlacesCoord = new ArrayList<HashMap<String, String>>();
 
         for(int i=0 ; i<aPlaceData.length ; i++){
             final String[] aData = aPlaceData[i].split(";");
             String address = aData[4];
             String date = aData[5];
 
-            System.out.println("address:"+address);
-            System.out.println("date:"+date);
-
             final String sCoord = getCoordinateFromAddress(address);
+
             aPlacesCoord.add(new HashMap<String, String>(){{
+                put("open_date", aData[0]);
                 put("date", aData[5]);
                 put("address", aData[4]);
                 put("coord", sCoord);
@@ -210,61 +284,53 @@ public class PathHistoryTableFragment extends Fragment {
         return csv_arr;
     }
 
-    public boolean isContact(){
-        ArrayList userRoutes = new ArrayList<>();
-        for(String item : MainActivity.selectAllGPS()){
-            userRoutes.add( item.split(";") );
+    public boolean isContact(double venueLat, double venueLng, double userLat, double userLng){
+        double latDistance = Math.toRadians(userLat - venueLat);
+        double lngDistance = Math.toRadians(userLng - venueLng);
+        double a = (Math.sin(latDistance / 2) * Math.sin(latDistance / 2)) +
+                (Math.cos(Math.toRadians(userLat))) *
+                        (Math.cos(Math.toRadians(venueLat))) *
+                        (Math.sin(lngDistance / 2)) *
+                        (Math.sin(lngDistance / 2));
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        double dist = 6371 * c;
+        if (dist<0.05){ //(in km, you can use 0.1 for metres etc.)
+            /* If it's within 10m, we assume we're not moving */
+
+            return true;
         }
-
-        ArrayList<String[]> routes = new ArrayList<String[]>();
-
-        routes = getDataFromCSV( new InputStreamReader(getResources().openRawResource(R.raw.cb_routes)) );
-
-        ArrayList<LatLng> LL_arr = new ArrayList<LatLng>();
-
-
-        for(int j=0 ; j<userRoutes.size() ; j++){
-            String[] temp = (String[]) userRoutes.get(j);
-            Long userDate = Long.parseLong(temp[0]);
-            Double userLat = Double.parseDouble(temp[1]);
-            Double userLng = Double.parseDouble(temp[2]);
-
-
-            for (int i = 1; i < routes.size(); i++) {
-                if (routes.get(i)[5]!=null && !routes.get(i)[5].equals("")) {
-                    Long date = Long.parseLong( routes.get(i)[1]+routes.get(i)[2] );
-                    double venueLat = Double.valueOf( routes.get(i)[5] );
-                    double venueLng = Double.valueOf( routes.get(i)[6] );
-
-                    if(date <= userDate){
-                        double latDistance = Math.toRadians(userLat - venueLat);
-                        double lngDistance = Math.toRadians(userLng - venueLng);
-                        double a = (Math.sin(latDistance / 2) * Math.sin(latDistance / 2)) +
-                                (Math.cos(Math.toRadians(userLat))) *
-                                        (Math.cos(Math.toRadians(venueLat))) *
-                                        (Math.sin(lngDistance / 2)) *
-                                        (Math.sin(lngDistance / 2));
-
-                        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-                        double dist = 6371 * c;
-                        if (dist<0.05){ //(in km, you can use 0.1 for metres etc.)
-                            /* If it's within 10m, we assume we're not moving */
-
-                            return true;
-                        }
-                    }
-//                        LL_arr.add(new LatLng(latitude, longitude));
-
-//                    System.out.println( date+"\t:\t"+latitude +"\t" + longitude );
-
-
-                }
-            }
-        }
-
 
         return false;
+    }
+
+
+    private Calendar getDateTime(String strDatetime) {
+        Calendar cal = Calendar.getInstance();
+        String[] strSplitDateTime = strDatetime.split(" ");
+        String[] strSplitDate = strSplitDateTime[0].split("-");
+        String[] strSplitTime = strSplitDateTime[1].split(":");
+
+        cal.set(Integer.parseInt(strSplitDate[0]), Integer.parseInt(strSplitDate[1]) - 1,
+                Integer.parseInt(strSplitDate[2]), Integer.parseInt(strSplitTime[0]), Integer.parseInt(strSplitTime[1]),
+                Integer.parseInt(strSplitTime[2]));
+
+        return cal;
+    }
+
+    private Boolean getValidDate(String strStart, String strEnd, String strValue) {
+        Calendar calStart = getDateTime(strStart);
+        Calendar calEnd = getDateTime(strEnd);
+        Calendar calValue = getDateTime(strValue);
+
+        Boolean bValid = false;
+
+        if (calStart.before (calValue) && calEnd.after(calValue)) {
+            bValid = true;
+        }
+
+        return bValid;
     }
 
     public String getAddressFromCoordinate(String latitude, String longitude) {
@@ -355,7 +421,6 @@ public class PathHistoryTableFragment extends Fragment {
                     return coord;
                 }
             };
-            System.out.println(reverseGeocodeURL);
             result_coord = asyncTask.execute(reverseGeocodeURL).get();
         }
         catch (Exception e) {

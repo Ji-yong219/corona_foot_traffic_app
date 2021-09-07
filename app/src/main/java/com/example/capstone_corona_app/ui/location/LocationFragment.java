@@ -1,5 +1,7 @@
 package com.example.capstone_corona_app.ui.location;
 
+import android.app.FragmentManager;
+import android.graphics.Path;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.graphics.Color;
+
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -19,6 +22,8 @@ import com.example.capstone_corona_app.MainActivity;
 import com.example.capstone_corona_app.R;
 
 
+import com.example.capstone_corona_app.ui.path_history.PathHistoryFragment;
+import com.example.capstone_corona_app.ui.path_history.PathHistoryTableFragment;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.geometry.LatLngBounds;
 import com.naver.maps.map.CameraPosition;
@@ -26,6 +31,7 @@ import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
+import com.naver.maps.map.overlay.CircleOverlay;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.MultipartPathOverlay;
 import com.naver.maps.map.overlay.OverlayImage;
@@ -37,6 +43,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -133,42 +140,26 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
         return root;
     }
 
+    public void setConfirmPlace(@NonNull NaverMap naverMap){
+        PathHistoryTableFragment fragment = (PathHistoryTableFragment) getFragmentManager().findFragmentById(R.id.nav_host_fragment);
 
+        System.out.println("ㅋㅌㅋㅋㅋㅋㅋㅋㅋ"+fragment);
 
-    public void setRouteConfirmed(@NonNull NaverMap naverMap){
-        ArrayList<String[]> patients = new ArrayList<String[]>();
-        ArrayList<String[]> routes = new ArrayList<String[]>();
+        ArrayList<HashMap<String, String>> confirmPlacesCJ = fragment.getConfirmPlacesCheongJu();
 
-//        patients = getDataFromCSV( new InputStreamReader(getResources().openRawResource(R.raw.patients)) );
-//        routes = getDataFromCSV( new InputStreamReader(getResources().openRawResource(R.raw.cb_routes)) );
+        for(HashMap<String, String> place : confirmPlacesCJ) {
+            Double dPlaceLatitude = Double.parseDouble( place.get("coord").split(";")[0] );
+            Double dPlaceLongitude = Double.parseDouble( place.get("coord").split(";")[1] );
 
-        PathOverlay path = new PathOverlay();
-        MultipartPathOverlay multipartPath = new MultipartPathOverlay();
-
-        ArrayList arr_arr = new ArrayList<>();
-        ArrayList<LatLng> LL_arr = new ArrayList<LatLng>();
-
-        for(int patient=1 ; patient<=1 ; patient++) {
-            for (int i = 0; i < routes.size(); i++) {
-//            if(routes.get(i)[7].equals("Chungcheongbuk-do") && routes.get(i)[7].equals("Chungcheongbuk-do")){
-                if (routes.get(i)[0].equals(String.valueOf(patient)) && routes.get(i)[5]!=null && !routes.get(i)[5].equals("")) {
-                    double latitude = Double.valueOf( routes.get(i)[5] );
-                    double longitude = Double.valueOf( routes.get(i)[6] );
-                    LL_arr.add(new LatLng(latitude, longitude));
-                }
-//                System.out.println("");
-            }
-//            arr_arr.add(LL_arr);
-//            LL_arr.clear();
+            CircleOverlay circle = new CircleOverlay();
+            circle.setCenter(new LatLng(dPlaceLatitude, dPlaceLongitude));
+            circle.setRadius(50);
+            circle.setColor(Color.RED);
+            circle.setMap(naverMap);
         }
-        path.setCoords(LL_arr);
-        path.setWidth(25);
-//        path.setPatternImage(OverlayImage.fromResource(R.drawable.path_pattern));
-//        path.setPatternInterval(10);
-        path.setColor(Color.RED);
-        path.setMap(naverMap);
-    }
 
+
+    }
 
     public void setRoute(@NonNull NaverMap naverMap, String date){
         ArrayList<String[]> routes = new ArrayList<String[]>();
@@ -196,6 +187,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
             double longitude = Double.valueOf( routes.get(i)[2] );
             LL_arr.add(new LatLng(latitude, longitude));
         }
+
         if(routes.size() > 0 && LL_arr.size()>1){
             path.setCoords(LL_arr);
             path.setWidth(7);
@@ -250,6 +242,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
 
             path_arr.add(path);
         }
+
     }
 
     public void onMapReady(@NonNull NaverMap naverMap){
@@ -268,6 +261,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
         );
         naverMap.setCameraPosition(cameraPosition);
 
+        setConfirmPlace(naverMap);
 
         String date = (String) dateView.getText();
         setRoute(naverMap, date);
