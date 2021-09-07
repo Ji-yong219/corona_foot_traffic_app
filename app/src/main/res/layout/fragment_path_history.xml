@@ -21,6 +21,7 @@
             android:id="@+id/gridViewPathHistory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:numColumns="3"
             android:gravity="center"
             android:horizontalSpacing="20dp"

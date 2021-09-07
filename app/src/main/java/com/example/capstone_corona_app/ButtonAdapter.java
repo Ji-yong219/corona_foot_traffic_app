@@ -3,6 +3,7 @@ package com.example.capstone_corona_app;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.provider.CalendarContract;
 import android.view.View;
@@ -48,14 +49,16 @@ public class ButtonAdapter extends BaseAdapter{
         else {
             //------------------------------------------------------------
             // 버튼을 생성하고 그것의 이름을 정합니다.
-            GridView.LayoutParams params = new GridView.LayoutParams(200, 200);
+            GridView.LayoutParams params = new GridView.LayoutParams(200, 160);
 
             button = new Button(context);
             button.setText(buttonNames[position]);
             button.setLayoutParams(params);
             button.setTextSize(24);
-            button.setBackgroundColor(button.getContext().getResources().getColor(R.color.colorButton));
-//            button.setCornerRadius
+            GradientDrawable shape = new GradientDrawable();
+            shape.setCornerRadius(50);
+            shape.setColor(button.getContext().getResources().getColor(R.color.colorButton));
+            button.setBackground(shape);
 
             //------------------------------------------------------------
 
