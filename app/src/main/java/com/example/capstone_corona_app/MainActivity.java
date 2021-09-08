@@ -352,10 +352,36 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
+    public ArrayList<HashMap<String, String>> getConfirmPlacesSeJong(){
+        String url = "https://www.sejong.go.kr/bbs/R3621/list.do";
+        String sPlaceData = getPlaceDataFromSoupSJ( getSoupFromUrl(url) );
+        String[] aPlaceData = sPlaceData.split("<newline>");
+
+        ArrayList<HashMap<String, String>> aPlacesCoord = new ArrayList<HashMap<String, String>>();
+
+        for(int i=0 ; i<aPlaceData.length ; i++){
+            final String[] aData = aPlaceData[i].split(";");
+            String address = aData[0]+"시 "+aData[3];
+            String date = aData[4];
+
+            final String sCoord = getCoordinateFromAddress(address);
+            if(sCoord == null){
+                continue;
+            }
+
+            aPlacesCoord.add(new HashMap<String, String>(){{
+                put("date", aData[4]);
+                put("address", aData[3]);
+                put("name", aData[2]);
+                put("coord", sCoord);
+            }});
+        }
+        return aPlacesCoord;
+    }
 
     public ArrayList<HashMap<String, String>> getConfirmPlacesCheongJu(){
         String url = "https://corona.cheongju.go.kr/ajax_move.txt";
-        String sPlaceData = getSoupFromUrl(url);
+        String sPlaceData = getPlaceDataFromSoupCJ( getSoupFromUrl(url) );
         String[] aPlaceData = sPlaceData.split("<newline>");
 
         ArrayList<HashMap<String, String>> aPlacesCoord = new ArrayList<HashMap<String, String>>();
@@ -549,10 +575,15 @@ public class MainActivity extends AppCompatActivity implements
 
 
                     LinkedHashMap<String, Object> temp = (LinkedHashMap<String, Object>) ((HashMap<String, Object>) map.get("response")).get("result");
-                    LinkedHashMap<String, String> coord2 = (LinkedHashMap<String, String>) temp.get("point");
-                    coord = coord2.get("x")+";"+coord2.get("y");
+                    if( temp == null ){
+                        return null;
+                    }
+                    else {
+                        LinkedHashMap<String, String> coord2 = (LinkedHashMap<String, String>) temp.get("point");
+                        coord = coord2.get("x") + ";" + coord2.get("y");
 
-                    return coord;
+                        return coord;
+                    }
                 }
             };
             result_coord = asyncTask.execute(reverseGeocodeURL).get();
@@ -564,12 +595,13 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    public String getSoupFromUrl(String url) {
+    public Document getSoupFromUrl(String url) {
         Document doc = null;
 
         try {
             AsyncTask<String, Void, Document> asyncTask = new AsyncTask<String, Void, Document>() {
                 Document doc2;
+
                 @Override
                 protected Document doInBackground(String... url) {
                     try {
@@ -582,17 +614,40 @@ public class MainActivity extends AppCompatActivity implements
             };
 
             doc = asyncTask.execute(url).get();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
 
         }
+        return doc;
+    }
 
+    public String getPlaceDataFromSoupCJ(Document doc){
         Elements mElementDatas = doc.select("tr");
 
         StringBuilder builder_row = new StringBuilder();
 
         String[] columns = new String[] { "공개일", "시/군/구", "장소유형", "상호명", "도로명 주소", "노출일시", "소독여부"};
         for (int i=1 ; i<mElementDatas.size() ; i++) {
+            Element row = mElementDatas.get(i);
+
+            Iterator<Element> iterElem = row.getElementsByTag("td").iterator();
+
+            StringBuilder builder_col = new StringBuilder();
+
+            for (String column : columns) {
+                builder_col.append(iterElem.next().text()+";");
+            }
+            builder_row.append(builder_col.toString().substring(0, builder_col.toString().length()-1) + "<newline>");
+        }
+        return builder_row.toString();
+    }
+
+    public String getPlaceDataFromSoupSJ(Document doc){
+        Elements mElementDatas = doc.select("tr[class='covidnotice']");
+
+        StringBuilder builder_row = new StringBuilder();
+
+        String[] columns = new String[] { "시도", "장소유형", "상호명", "도로명 주소", "노출일시", "소독여부"};
+        for (int i=0 ; i<mElementDatas.size() ; i++) {
             Element row = mElementDatas.get(i);
 
             Iterator<Element> iterElem = row.getElementsByTag("td").iterator();

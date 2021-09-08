@@ -142,8 +142,9 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public void setConfirmPlace(@NonNull NaverMap naverMap){
-        System.out.println();
         ArrayList<HashMap<String, String>> confirmPlacesCJ = ((MainActivity)getActivity()).getConfirmPlacesCheongJu();
+        ArrayList<HashMap<String, String>> confirmPlacesSJ = ((MainActivity)getActivity()).getConfirmPlacesSeJong();
+        confirmPlacesCJ.addAll(confirmPlacesSJ);
 
         for(final HashMap<String, String> place : confirmPlacesCJ) {
             Double dPlaceLatitude = Double.parseDouble( place.get("coord").split(";")[0] );
