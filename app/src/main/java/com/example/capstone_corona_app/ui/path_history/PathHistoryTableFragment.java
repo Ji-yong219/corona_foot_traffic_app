@@ -96,7 +96,6 @@ public class PathHistoryTableFragment extends Fragment {
             ArrayList<HashMap<String, String>> confirmPlacesSJ = ((MainActivity)getActivity()).getConfirmPlacesSeJong();
             ArrayList<HashMap<String, String>> confirmPlacesDJ = ((MainActivity)getActivity()).getConfirmPlacesDaejeon();
 
-            confirmPlacesCJ.addAll(confirmPlacesSJ);
             confirmPlacesCJ.addAll(confirmPlacesDJ);
 
             boolean is_visit = false;
@@ -191,6 +190,99 @@ public class PathHistoryTableFragment extends Fragment {
                     System.out.println("비접촉");
                 }
             }
+
+
+            for(HashMap<String, String> place : confirmPlacesSJ){
+//                String sOpenDate = place.get("open_date");
+                String sOpenDate = "2021.00000";
+                String sPlaceDate = place.get("date");
+
+                Pattern pattern = Pattern.compile("\\d{1,2}/\\d{1,2} ");
+                Matcher matcher = pattern.matcher(sPlaceDate);
+
+                ArrayList<String> aPlaceDate = new ArrayList<String>();
+
+                boolean found = false;
+
+                while(matcher.find()){
+                    aPlaceDate.add( matcher.group() );
+                    found = true;
+                }
+                if(found){
+                    try {
+                        if(aPlaceDate.size()==1){
+                            aPlaceDate.add(aPlaceDate.get(0));
+                        }
+
+                        Date start = fDate.parse(
+                                sOpenDate.split("\\.")[0]
+                                        +"-"+aPlaceDate.get(0).split("/")[0]
+                                        +"-"+aPlaceDate.get(0).split("/")[1]
+                                        +" "
+                                        +"00:00:00"
+                        );
+
+                        String to = fDate.format(start);
+                        aPlaceDate.add( to );
+
+                        Date end = fDate.parse(
+                                sOpenDate.split("\\.")[0]
+                                        +"-"+aPlaceDate.get(1).split("/")[0]
+                                        +"-"+aPlaceDate.get(1).split("/")[1]
+                                        +" "
+                                        +"23:59:59"
+                        );
+
+                        to = fDate.format(end);
+                        aPlaceDate.add( to );
+
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else{
+                    System.out.println("날짜 찾기 에러");
+                    System.out.println(sPlaceDate);
+                    continue;
+                }
+
+                String sPlaceLatitude = place.get("coord").split(";")[0];
+                String sPlaceLongitude = place.get("coord").split(";")[1];
+
+                String sUserDate = aUser_LL[0].substring(0, 4)
+                        + "-"
+                        + aUser_LL[0].substring(4, 6)
+                        + "-"
+                        + aUser_LL[0].substring(6, 8)
+                        + " "
+                        + aUser_LL[1].substring(0, 2)
+                        + ":"
+                        + aUser_LL[1].substring(2, 4)
+                        + ":"
+                        + aUser_LL[1].substring(4, 6);
+
+                if(aPlaceDate.size() < 4) continue;
+
+                if( ((MainActivity) getActivity()).getValidDate(aPlaceDate.get(aPlaceDate.size()-2), aPlaceDate.get(aPlaceDate.size()-1), sUserDate) ){
+                    if(((MainActivity) getActivity()).isContact(
+                            Double.parseDouble(sPlaceLatitude),
+                            Double.parseDouble(sPlaceLongitude),
+                            Double.parseDouble(sUserLatitude),
+                            Double.parseDouble(sUserLongitude)
+                    )){
+                        System.out.println("접촉");
+                        is_visit = true;
+                    }
+                    else{
+                        System.out.println("비접촉");
+                    }
+                }
+                else{
+                    System.out.println("비접촉");
+                }
+            }
+
 
 
             TextView textViewDate = new TextView(container.getContext());
