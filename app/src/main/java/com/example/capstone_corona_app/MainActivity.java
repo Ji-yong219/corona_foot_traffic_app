@@ -777,7 +777,7 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
-    public get
+//    public get
 
 
     public static void insertGPS(double latitude, double longitude){
