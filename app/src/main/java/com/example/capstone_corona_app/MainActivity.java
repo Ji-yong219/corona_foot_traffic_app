@@ -65,6 +65,11 @@ import org.jsoup.select.Elements;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -74,6 +79,14 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -352,6 +365,65 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
+    public static void setSSL() throws NoSuchAlgorithmException, KeyManagementException {
+        TrustManager[] trustAllCerts = new TrustManager[] {
+                new X509TrustManager() {
+                    @Override
+                    public X509Certificate[] getAcceptedIssuers() {
+                        // TODO Auto-generated method stub
+                        return null;
+                    }
+                    @Override
+                    public void checkClientTrusted(X509Certificate[] chain, String authType)
+                            throws CertificateException {
+                        // TODO Auto-generated method stub
+
+                    }
+                    @Override
+                    public void checkServerTrusted(X509Certificate[] chain, String authType)
+                            throws CertificateException {
+                        // TODO Auto-generated method stub
+                    }
+                }
+        };
+        SSLContext sc = SSLContext.getInstance("SSL");
+        sc.init(null, trustAllCerts, new SecureRandom());
+        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        });
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+    }
+
+    public ArrayList<HashMap<String, String>> getConfirmPlacesDaejeon(){
+        String url = "https://www.daejeon.go.kr/corona19/index.do?menuId=0008";
+        String sPlaceData = getPlaceDataFromSoupDJ( getSoupFromUrl(url) );
+        String[] aPlaceData = sPlaceData.split("<newline>");
+
+        ArrayList<HashMap<String, String>> aPlacesCoord = new ArrayList<HashMap<String, String>>();
+
+        for(int i=0 ; i<aPlaceData.length ; i++){
+            final String[] aData = aPlaceData[i].split(";");
+            String address = "대전광역시 "+aData[0]+" "+aData[3];
+            String date = aData[4];
+
+            final String sCoord = getCoordinateFromAddress(address);
+            if(sCoord == null){
+                continue;
+            }
+
+            aPlacesCoord.add(new HashMap<String, String>(){{
+                put("date", aData[4]);
+                put("address", aData[3]);
+                put("name", aData[2]);
+                put("coord", sCoord);
+            }});
+        }
+        return aPlacesCoord;
+    }
+
     public ArrayList<HashMap<String, String>> getConfirmPlacesSeJong(){
         String url = "https://www.sejong.go.kr/bbs/R3621/list.do";
         String sPlaceData = getPlaceDataFromSoupSJ( getSoupFromUrl(url) );
@@ -605,8 +677,13 @@ public class MainActivity extends AppCompatActivity implements
                 @Override
                 protected Document doInBackground(String... url) {
                     try {
+                        setSSL();
                         doc2 = Jsoup.connect(url[0]).get();
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    } catch (KeyManagementException e) {
                         e.printStackTrace();
                     }
                     return doc2;
@@ -656,6 +733,35 @@ public class MainActivity extends AppCompatActivity implements
 
             for (String column : columns) {
                 builder_col.append(iterElem.next().text()+";");
+            }
+            builder_row.append(builder_col.toString().substring(0, builder_col.toString().length()-1) + "<newline>");
+        }
+        return builder_row.toString();
+    }
+    
+    public String getPlaceDataFromSoupDJ(Document doc){
+        Elements mElementDatas = doc.select("#content table[class='corona'] tr");
+
+        StringBuilder builder_row = new StringBuilder();
+
+        String[] columns = new String[] { "시군구", "장소유형", "상호명", "도로명 주소", "노출일시", "소독여부", "비고"};
+        for (int i=1 ; i < mElementDatas.size() ; i++) {
+            Element row = mElementDatas.get(i);
+
+            Iterator<Element> iterElem = row.getElementsByTag("td").iterator();
+
+            StringBuilder builder_col = new StringBuilder();
+
+            int count = 0;
+
+            for (String column : columns) {
+                if(iterElem.hasNext()){
+                    builder_col.append(iterElem.next().text()+";");
+                    count++;
+                }
+            }
+            if(count < 6){
+                continue;
             }
             builder_row.append(builder_col.toString().substring(0, builder_col.toString().length()-1) + "<newline>");
         }
