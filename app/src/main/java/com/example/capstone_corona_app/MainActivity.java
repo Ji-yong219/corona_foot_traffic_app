@@ -539,7 +539,6 @@ public class MainActivity extends AppCompatActivity implements
 
 
     private Calendar getDateTime(String strDatetime) {
-        System.out.println("strDatetime:"+strDatetime);
         Calendar cal = Calendar.getInstance();
         String[] strSplitDateTime = strDatetime.split(" ");
         String[] strSplitDate = strSplitDateTime[0].split("-");
@@ -590,6 +589,8 @@ public class MainActivity extends AppCompatActivity implements
                     String getJson = jsonReader.callURL(url[0]);
                     Map<String, Object> map = jsonReader.string2Map(getJson);
 
+                    if(((HashMap<String, Object>) map.get("response")).get("status").equals("NOT_FOUND"))
+                        return null;
 
                     // 지도 결과 확인하기
                     ArrayList reverseGeocodeResultArr = (ArrayList) ((HashMap<String, Object>) map.get("response")).get("result");
@@ -776,7 +777,7 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
-
+    public get
 
 
     public static void insertGPS(double latitude, double longitude){

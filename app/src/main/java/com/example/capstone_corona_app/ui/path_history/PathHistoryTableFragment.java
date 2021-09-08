@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Spannable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -151,6 +152,8 @@ public class PathHistoryTableFragment extends Fragment {
                 }
                 else{
                     System.out.println("날짜 찾기 에러");
+                    System.out.println(sPlaceDate);
+                    continue;
                 }
 
                 String sPlaceLatitude = place.get("coord").split(";")[0];
@@ -189,21 +192,17 @@ public class PathHistoryTableFragment extends Fragment {
                 }
             }
 
-            int text_color = Color.BLACK;
-            int background_color = Color.WHITE;
-            if(is_visit){
-                text_color = Color.RED;
-                background_color = Color.YELLOW;
-            }
-
 
             TextView textViewDate = new TextView(container.getContext());
             String tempDate = Integer.parseInt(aUser_LL[0].substring(4, 6)) + "." + Integer.parseInt(aUser_LL[0].substring(6, 8));
             textViewDate.setText(tempDate);
             textViewDate.setGravity(Gravity.CENTER);
             textViewDate.setTextSize(18);
-            textViewDate.setTextColor(text_color);
-            textViewDate.setBackgroundColor(background_color);
+
+            if(is_visit){
+                textViewDate.setTextColor(Color.RED);
+                textViewDate.setBackgroundColor(Color.YELLOW);
+            }
             textViewDate.setBackgroundResource(R.drawable.table_border);
 
             textViewDate.setLayoutParams(new TableRow.LayoutParams(
@@ -216,8 +215,10 @@ public class PathHistoryTableFragment extends Fragment {
             textViewTime.setText(tempTime);
             textViewTime.setGravity(Gravity.CENTER);
             textViewTime.setTextSize(18);
-            textViewDate.setTextColor(text_color);
-            textViewDate.setBackgroundColor(background_color);
+            if(is_visit){
+                textViewDate.setTextColor(Color.RED);
+                textViewDate.setBackgroundColor(Color.YELLOW);
+            }
             textViewTime.setBackgroundResource(R.drawable.table_border);
 
             textViewTime.setLayoutParams(new TableRow.LayoutParams(
@@ -231,8 +232,10 @@ public class PathHistoryTableFragment extends Fragment {
             textViewPlace.setText(address);
             textViewPlace.setGravity(Gravity.CENTER);
             textViewPlace.setTextSize(12);
-            textViewDate.setTextColor(text_color);
-            textViewDate.setBackgroundColor(background_color);
+            if(is_visit){
+                textViewDate.setTextColor(Color.RED);
+                textViewDate.setBackgroundColor(Color.YELLOW);
+            }
             textViewPlace.setBackgroundResource(R.drawable.table_border);
 
             textViewPlace.setLayoutParams(new TableRow.LayoutParams(
