@@ -4,17 +4,19 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/github/corona_foot_traffic_app/app/src/main/res/drawable/button_round.xml" value="0.3758974358974359" />
+        <entry key="..\:/github/corona_foot_traffic_app/app/src/main/res/drawable/loading_animation_list.xml" value="0.1" />
         <entry key="..\:/github/corona_foot_traffic_app/app/src/main/res/drawable/table_border.xml" value="0.1" />
         <entry key="..\:/github/corona_foot_traffic_app/app/src/main/res/layout/activity_login.xml" value="0.19010416666666666" />
         <entry key="..\:/github/corona_foot_traffic_app/app/src/main/res/layout/activity_main.xml" value="0.11384615384615385" />
         <entry key="..\:/github/corona_foot_traffic_app/app/src/main/res/layout/activity_path_history.xml" value="0.18645833333333334" />
         <entry key="..\:/github/corona_foot_traffic_app/app/src/main/res/layout/activity_path_history_table.xml" value="0.18645833333333334" />
         <entry key="..\:/github/corona_foot_traffic_app/app/src/main/res/layout/activity_register.xml" value="0.2046875" />
+        <entry key="..\:/github/corona_foot_traffic_app/app/src/main/res/layout/dialog_layout.xml" value="0.2046875" />
         <entry key="..\:/github/corona_foot_traffic_app/app/src/main/res/layout/fragment_data.xml" value="0.18645833333333334" />
         <entry key="..\:/github/corona_foot_traffic_app/app/src/main/res/layout/fragment_home.xml" value="0.2046875" />
         <entry key="..\:/github/corona_foot_traffic_app/app/src/main/res/layout/fragment_location.xml" value="0.17452830188679244" />
         <entry key="..\:/github/corona_foot_traffic_app/app/src/main/res/layout/fragment_path_history.xml" value="0.167420814479638" />
-        <entry key="..\:/github/corona_foot_traffic_app/app/src/main/res/layout/fragment_path_history_table.xml" value="0.18645833333333334" />
+        <entry key="..\:/github/corona_foot_traffic_app/app/src/main/res/layout/fragment_path_history_table.xml" value="0.1" />
         <entry key="..\:/github/corona_foot_traffic_app/app/src/main/res/layout/fragment_setting.xml" value="0.2046875" />
         <entry key="..\:/github/corona_foot_traffic_app/app/src/main/res/menu/bottom_nav_menu.xml" value="0.2046875" />
         <entry key="..\:/github/corona_foot_traffic_app/app/src/main/res/xml/network_security_config.xml" value="0.2265625" />

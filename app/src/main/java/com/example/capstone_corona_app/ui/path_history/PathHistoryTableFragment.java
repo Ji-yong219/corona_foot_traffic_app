@@ -1,10 +1,12 @@
 package com.example.capstone_corona_app.ui.path_history;
 
-import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,31 +21,15 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.android.volley.toolbox.HttpResponse;
-import com.example.capstone_corona_app.JsonReader;
 import com.example.capstone_corona_app.MainActivity;
 import com.example.capstone_corona_app.R;
 import com.example.capstone_corona_app.ui.location.LocationViewModel;
-import com.naver.maps.geometry.LatLng;
-import com.opencsv.CSVReader;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,7 +63,14 @@ public class PathHistoryTableFragment extends Fragment {
         ArrayList<String> user_LL_arr = ((MainActivity) getActivity()).getMonthRoutes(month);
 
 
-        SimpleDateFormat fDate = new SimpleDateFormat("yyyy-MM-DD hh:mm:ss");
+        SimpleDateFormat fDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+//        ProgressDialog dialog = ProgressDialog.show(getContext(), "",
+//                "접촉을 파악하고 있어요..", true);
+
+        ArrayList<HashMap<String, String>> confirmPlacesCJ = ((MainActivity) getActivity()).getConfirmPlacesCheongJu();
+        ArrayList<HashMap<String, String>> confirmPlacesSJ = ((MainActivity)getActivity()).getConfirmPlacesSeJong();
+        ArrayList<HashMap<String, String>> confirmPlacesDJ = ((MainActivity)getActivity()).getConfirmPlacesDaejeon();
 
         for (int i = 0; i < user_LL_arr.size(); i++) {
             TableRow tableRow = new TableRow(container.getContext());
@@ -92,9 +85,6 @@ public class PathHistoryTableFragment extends Fragment {
             String sUserLatitude = aUser_LL[2].split(",")[0];
             String sUserLongitude = aUser_LL[2].split(",")[1];
 
-            ArrayList<HashMap<String, String>> confirmPlacesCJ = ((MainActivity) getActivity()).getConfirmPlacesCheongJu();
-            ArrayList<HashMap<String, String>> confirmPlacesSJ = ((MainActivity)getActivity()).getConfirmPlacesSeJong();
-            ArrayList<HashMap<String, String>> confirmPlacesDJ = ((MainActivity)getActivity()).getConfirmPlacesDaejeon();
 
             confirmPlacesCJ.addAll(confirmPlacesDJ);
 
@@ -155,8 +145,8 @@ public class PathHistoryTableFragment extends Fragment {
                     continue;
                 }
 
-                String sPlaceLatitude = place.get("coord").split(";")[0];
-                String sPlaceLongitude = place.get("coord").split(";")[1];
+                String sPlaceLongitude = place.get("coord").split(";")[0];
+                String sPlaceLatitude = place.get("coord").split(";")[1];
 
                 String sUserDate = aUser_LL[0].substring(0, 4)
                         + "-"
@@ -183,11 +173,11 @@ public class PathHistoryTableFragment extends Fragment {
                         is_visit = true;
                     }
                     else{
-                        System.out.println("비접촉");
+//                        System.out.println("비접촉");
                     }
                 }
                 else{
-                    System.out.println("비접촉");
+//                    System.out.println("비접촉");
                 }
             }
 
@@ -216,8 +206,8 @@ public class PathHistoryTableFragment extends Fragment {
 
                         Date start = fDate.parse(
                                 sOpenDate.split("\\.")[0]
-                                        +"-"+aPlaceDate.get(0).split("/")[0]
-                                        +"-"+aPlaceDate.get(0).split("/")[1]
+                                        +"-"+aPlaceDate.get(0).split("/")[0].trim()
+                                        +"-"+aPlaceDate.get(0).split("/")[1].trim()
                                         +" "
                                         +"00:00:00"
                         );
@@ -227,8 +217,8 @@ public class PathHistoryTableFragment extends Fragment {
 
                         Date end = fDate.parse(
                                 sOpenDate.split("\\.")[0]
-                                        +"-"+aPlaceDate.get(1).split("/")[0]
-                                        +"-"+aPlaceDate.get(1).split("/")[1]
+                                        +"-"+aPlaceDate.get(1).split("/")[0].trim()
+                                        +"-"+aPlaceDate.get(1).split("/")[1].trim()
                                         +" "
                                         +"23:59:59"
                         );
@@ -247,8 +237,8 @@ public class PathHistoryTableFragment extends Fragment {
                     continue;
                 }
 
-                String sPlaceLatitude = place.get("coord").split(";")[0];
-                String sPlaceLongitude = place.get("coord").split(";")[1];
+                String sPlaceLongitude = place.get("coord").split(";")[0];
+                String sPlaceLatitude = place.get("coord").split(";")[1];
 
                 String sUserDate = aUser_LL[0].substring(0, 4)
                         + "-"
@@ -275,11 +265,11 @@ public class PathHistoryTableFragment extends Fragment {
                         is_visit = true;
                     }
                     else{
-                        System.out.println("비접촉");
+//                        System.out.println("비접촉");
                     }
                 }
                 else{
-                    System.out.println("비접촉");
+//                    System.out.println("비접촉");
                 }
             }
 
@@ -287,14 +277,18 @@ public class PathHistoryTableFragment extends Fragment {
 
             TextView textViewDate = new TextView(container.getContext());
             String tempDate = Integer.parseInt(aUser_LL[0].substring(4, 6)) + "." + Integer.parseInt(aUser_LL[0].substring(6, 8));
-            textViewDate.setText(tempDate);
-            textViewDate.setGravity(Gravity.CENTER);
-            textViewDate.setTextSize(18);
 
             if(is_visit){
+                Spannable spanna = new SpannableString(tempDate);
                 textViewDate.setTextColor(Color.RED);
-                textViewDate.setBackgroundColor(Color.YELLOW);
+                spanna.setSpan(new BackgroundColorSpan(Color.YELLOW), 0, tempDate.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                textViewDate.setText(spanna);
             }
+            else textViewDate.setText(tempDate);
+
+            textViewDate.setGravity(Gravity.CENTER);
+            textViewDate.setTextSize(18);
             textViewDate.setBackgroundResource(R.drawable.table_border);
 
             textViewDate.setLayoutParams(new TableRow.LayoutParams(
@@ -304,13 +298,18 @@ public class PathHistoryTableFragment extends Fragment {
 
             TextView textViewTime = new TextView(container.getContext());
             String tempTime = String.valueOf(aUser_LL[1].substring(0, 2)) + ":" + String.valueOf(aUser_LL[1].substring(2, 4));
-            textViewTime.setText(tempTime);
+
+            if(is_visit){
+                Spannable spanna = new SpannableString(tempTime);
+                textViewTime.setTextColor(Color.RED);
+                spanna.setSpan(new BackgroundColorSpan(Color.YELLOW), 0, tempTime.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                textViewTime.setText(spanna);
+            }
+            else textViewTime.setText(tempTime);
+
             textViewTime.setGravity(Gravity.CENTER);
             textViewTime.setTextSize(18);
-            if(is_visit){
-                textViewDate.setTextColor(Color.RED);
-                textViewDate.setBackgroundColor(Color.YELLOW);
-            }
             textViewTime.setBackgroundResource(R.drawable.table_border);
 
             textViewTime.setLayoutParams(new TableRow.LayoutParams(
@@ -321,13 +320,18 @@ public class PathHistoryTableFragment extends Fragment {
 
             TextView textViewPlace = new TextView(container.getContext());
             String address = ((MainActivity) getActivity()).getAddressFromCoordinate(sUserLatitude, sUserLongitude);
-            textViewPlace.setText(address);
+
+            if(is_visit){
+                Spannable spanna = new SpannableString(address);
+                textViewPlace.setTextColor(Color.RED);
+                spanna.setSpan(new BackgroundColorSpan(Color.YELLOW), 0, address.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                textViewPlace.setText(spanna);
+            }
+            else textViewPlace.setText(address);
+
             textViewPlace.setGravity(Gravity.CENTER);
             textViewPlace.setTextSize(12);
-            if(is_visit){
-                textViewDate.setTextColor(Color.RED);
-                textViewDate.setBackgroundColor(Color.YELLOW);
-            }
             textViewPlace.setBackgroundResource(R.drawable.table_border);
 
             textViewPlace.setLayoutParams(new TableRow.LayoutParams(
@@ -340,6 +344,10 @@ public class PathHistoryTableFragment extends Fragment {
 
             tableLayout.addView(tableRow);
         }
+
+//        dialog.dismiss();
+
         return root;
     }
 }
+
