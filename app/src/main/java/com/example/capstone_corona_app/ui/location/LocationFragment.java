@@ -249,11 +249,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
 
                 marker_arr.add(marker);
             }
-
-
             path_arr.add(path);
         }
-
     }
 
     public void onMapReady(@NonNull NaverMap naverMap){

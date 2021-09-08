@@ -82,13 +82,14 @@ public class LocationViewModel extends ViewModel {
 
             return "1";
         }
-        else if( ago_cal.compareTo(cal) > -1){
-            ago_cal.add(Calendar.DATE, 1);
-            resultDate = ago_cal.getTime();
-            target_day = -14;
-
-            return "-1";
-        }
+        // 현재보다 14일 이전일 경우 현재 값 반환
+//        else if( ago_cal.compareTo(cal) > -1){
+//            ago_cal.add(Calendar.DATE, 1);
+//            resultDate = ago_cal.getTime();
+//            target_day = -14;
+//
+//            return "-1";
+//        }
         else{
             resultDate = cal.getTime();
         }
