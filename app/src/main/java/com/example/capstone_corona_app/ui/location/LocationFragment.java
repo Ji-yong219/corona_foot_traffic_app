@@ -32,6 +32,7 @@ import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.overlay.CircleOverlay;
+import com.naver.maps.map.overlay.InfoWindow;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.MultipartPathOverlay;
 import com.naver.maps.map.overlay.OverlayImage;
@@ -141,24 +142,31 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public void setConfirmPlace(@NonNull NaverMap naverMap){
-        PathHistoryTableFragment fragment = (PathHistoryTableFragment) getFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        System.out.println();
+        ArrayList<HashMap<String, String>> confirmPlacesCJ = ((MainActivity)getActivity()).getConfirmPlacesCheongJu();
 
-        System.out.println("ㅋㅌㅋㅋㅋㅋㅋㅋㅋ"+fragment);
-
-        ArrayList<HashMap<String, String>> confirmPlacesCJ = fragment.getConfirmPlacesCheongJu();
-
-        for(HashMap<String, String> place : confirmPlacesCJ) {
+        for(final HashMap<String, String> place : confirmPlacesCJ) {
             Double dPlaceLatitude = Double.parseDouble( place.get("coord").split(";")[0] );
             Double dPlaceLongitude = Double.parseDouble( place.get("coord").split(";")[1] );
 
+            InfoWindow infoWindow = new InfoWindow();
+            infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(getContext()) {
+                @NonNull
+                @Override
+                public CharSequence getText(@NonNull InfoWindow infoWindow) {
+                    return place.get("name");
+                }
+            });
+
+            infoWindow.setPosition(new LatLng(dPlaceLongitude, dPlaceLatitude));
+            infoWindow.setMap(naverMap);
+
             CircleOverlay circle = new CircleOverlay();
-            circle.setCenter(new LatLng(dPlaceLatitude, dPlaceLongitude));
+            circle.setCenter(new LatLng(dPlaceLongitude, dPlaceLatitude));
             circle.setRadius(50);
-            circle.setColor(Color.RED);
+            circle.setColor(Color.argb(100, 255, 0, 0));
             circle.setMap(naverMap);
         }
-
-
     }
 
     public void setRoute(@NonNull NaverMap naverMap, String date){

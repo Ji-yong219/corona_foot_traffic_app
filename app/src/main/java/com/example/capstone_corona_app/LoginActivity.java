@@ -46,9 +46,10 @@ public class LoginActivity extends AppCompatActivity{
                 final String userID=et_id.getText().toString();
                 String userPass=et_pass.getText().toString();
 
-                setContentView(R.layout.activity_main);
-                Intent intent=new Intent(LoginActivity.this,MainActivity.class);
+//                setContentView(R.layout.activity_main);
+                Intent intent=new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
+                finish();
 
                 /*
 
