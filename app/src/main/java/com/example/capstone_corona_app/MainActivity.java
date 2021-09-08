@@ -539,6 +539,7 @@ public class MainActivity extends AppCompatActivity implements
 
 
     private Calendar getDateTime(String strDatetime) {
+        System.out.println("strDatetime:"+strDatetime);
         Calendar cal = Calendar.getInstance();
         String[] strSplitDateTime = strDatetime.split(" ");
         String[] strSplitDate = strSplitDateTime[0].split("-");

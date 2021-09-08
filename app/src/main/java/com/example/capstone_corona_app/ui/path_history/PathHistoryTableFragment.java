@@ -1,6 +1,7 @@
 package com.example.capstone_corona_app.ui.path_history;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -66,13 +67,11 @@ public class PathHistoryTableFragment extends Fragment {
 
         super.onCreate(savedInstanceState);
 
-
         ((MainActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true); // actionbar 좌측에 뒤로가기 화살표 표시
 
         tableLayout = (TableLayout) root.findViewById(R.id.tablelayout);
 
         int month = ((MainActivity) getActivity()).getPathMonth();
-//            isContact()
 
         ArrayList<String> user_LL_arr = ((MainActivity) getActivity()).getMonthRoutes(month);
 
@@ -89,38 +88,21 @@ public class PathHistoryTableFragment extends Fragment {
             String[] aUser_LL = sUser_LL.split(";");
 
 
-            TextView textViewDate = new TextView(container.getContext());
-            String tempDate = Integer.parseInt(aUser_LL[0].substring(4, 6)) + "." + Integer.parseInt(aUser_LL[0].substring(6, 8));
-            textViewDate.setText(tempDate);
-            textViewDate.setGravity(Gravity.CENTER);
-            textViewDate.setTextSize(18);
-            textViewDate.setBackgroundResource(R.drawable.table_border);
-
-            textViewDate.setLayoutParams(new TableRow.LayoutParams(
-                    0, TableRow.LayoutParams.WRAP_CONTENT, 1f
-            ));
-
-
-            TextView textViewTime = new TextView(container.getContext());
-            String tempTime = String.valueOf(aUser_LL[1].substring(0, 2)) + ":" + String.valueOf(aUser_LL[1].substring(2, 4));
-            textViewTime.setText(tempTime);
-            textViewTime.setGravity(Gravity.CENTER);
-            textViewTime.setTextSize(18);
-            textViewTime.setBackgroundResource(R.drawable.table_border);
-
-            textViewTime.setLayoutParams(new TableRow.LayoutParams(
-                    0, TableRow.LayoutParams.WRAP_CONTENT, 1.5f
-            ));
-
-
             String sUserLatitude = aUser_LL[2].split(",")[0];
             String sUserLongitude = aUser_LL[2].split(",")[1];
 
             ArrayList<HashMap<String, String>> confirmPlacesCJ = ((MainActivity) getActivity()).getConfirmPlacesCheongJu();
+            ArrayList<HashMap<String, String>> confirmPlacesSJ = ((MainActivity)getActivity()).getConfirmPlacesSeJong();
+            ArrayList<HashMap<String, String>> confirmPlacesDJ = ((MainActivity)getActivity()).getConfirmPlacesDaejeon();
 
+            confirmPlacesCJ.addAll(confirmPlacesSJ);
+            confirmPlacesCJ.addAll(confirmPlacesDJ);
+
+            boolean is_visit = false;
 
             for(HashMap<String, String> place : confirmPlacesCJ){
-                String sOpenDate = place.get("open_date");
+//                String sOpenDate = place.get("open_date");
+                String sOpenDate = "2021.00000";
                 String sPlaceDate = place.get("date");
 
                 Pattern pattern = Pattern.compile("\\d{1,2}.\\d{1,2}.\\([월화수목금토일]\\)");
@@ -136,22 +118,27 @@ public class PathHistoryTableFragment extends Fragment {
                 }
                 if(found){
                     try {
+                        if(aPlaceDate.size()==1){
+                            aPlaceDate.add(aPlaceDate.get(0));
+                        }
+
                         Date start = fDate.parse(
-                        sOpenDate.split("\\.")[0]
-                                +"-"+aPlaceDate.get(0).split("\\.")[0]
-                                +"-"+aPlaceDate.get(0).split("\\.")[1]
-                                +" "
-                                +"00:00:00"
+                                sOpenDate.split("\\.")[0]
+                                        +"-"+aPlaceDate.get(0).split("\\.")[0]
+                                        +"-"+aPlaceDate.get(0).split("\\.")[1]
+                                        +" "
+                                        +"00:00:00"
                         );
+
                         String to = fDate.format(start);
                         aPlaceDate.add( to );
 
                         Date end = fDate.parse(
-                            sOpenDate.split("\\.")[0]
-                                    +"-"+aPlaceDate.get(1).split("\\.")[0]
-                                    +"-"+aPlaceDate.get(1).split("\\.")[1]
-                                    +" "
-                                    +"23:59:59"
+                                sOpenDate.split("\\.")[0]
+                                        +"-"+aPlaceDate.get(1).split("\\.")[0]
+                                        +"-"+aPlaceDate.get(1).split("\\.")[1]
+                                        +" "
+                                        +"23:59:59"
                         );
 
                         to = fDate.format(end);
@@ -170,18 +157,20 @@ public class PathHistoryTableFragment extends Fragment {
                 String sPlaceLongitude = place.get("coord").split(";")[1];
 
                 String sUserDate = aUser_LL[0].substring(0, 4)
-                    + "-"
-                    + aUser_LL[0].substring(4, 6)
-                    + "-"
-                    + aUser_LL[0].substring(6, 8)
-                    + " "
-                    + aUser_LL[1].substring(0, 2)
-                    + ":"
-                    + aUser_LL[1].substring(2, 4)
-                    + ":"
-                    + aUser_LL[1].substring(4, 6);
+                        + "-"
+                        + aUser_LL[0].substring(4, 6)
+                        + "-"
+                        + aUser_LL[0].substring(6, 8)
+                        + " "
+                        + aUser_LL[1].substring(0, 2)
+                        + ":"
+                        + aUser_LL[1].substring(2, 4)
+                        + ":"
+                        + aUser_LL[1].substring(4, 6);
 
-                if( ((MainActivity) getActivity()).getValidDate(aPlaceDate.get(2), aPlaceDate.get(3), sUserDate) ){
+                if(aPlaceDate.size() < 4) continue;
+
+                if( ((MainActivity) getActivity()).getValidDate(aPlaceDate.get(aPlaceDate.size()-2), aPlaceDate.get(aPlaceDate.size()-1), sUserDate) ){
                     if(((MainActivity) getActivity()).isContact(
                             Double.parseDouble(sPlaceLatitude),
                             Double.parseDouble(sPlaceLongitude),
@@ -189,6 +178,7 @@ public class PathHistoryTableFragment extends Fragment {
                             Double.parseDouble(sUserLongitude)
                     )){
                         System.out.println("접촉");
+                        is_visit = true;
                     }
                     else{
                         System.out.println("비접촉");
@@ -199,11 +189,50 @@ public class PathHistoryTableFragment extends Fragment {
                 }
             }
 
+            int text_color = Color.BLACK;
+            int background_color = Color.WHITE;
+            if(is_visit){
+                text_color = Color.RED;
+                background_color = Color.YELLOW;
+            }
+
+
+            TextView textViewDate = new TextView(container.getContext());
+            String tempDate = Integer.parseInt(aUser_LL[0].substring(4, 6)) + "." + Integer.parseInt(aUser_LL[0].substring(6, 8));
+            textViewDate.setText(tempDate);
+            textViewDate.setGravity(Gravity.CENTER);
+            textViewDate.setTextSize(18);
+            textViewDate.setTextColor(text_color);
+            textViewDate.setBackgroundColor(background_color);
+            textViewDate.setBackgroundResource(R.drawable.table_border);
+
+            textViewDate.setLayoutParams(new TableRow.LayoutParams(
+                    0, TableRow.LayoutParams.WRAP_CONTENT, 1f
+            ));
+
+
+            TextView textViewTime = new TextView(container.getContext());
+            String tempTime = String.valueOf(aUser_LL[1].substring(0, 2)) + ":" + String.valueOf(aUser_LL[1].substring(2, 4));
+            textViewTime.setText(tempTime);
+            textViewTime.setGravity(Gravity.CENTER);
+            textViewTime.setTextSize(18);
+            textViewDate.setTextColor(text_color);
+            textViewDate.setBackgroundColor(background_color);
+            textViewTime.setBackgroundResource(R.drawable.table_border);
+
+            textViewTime.setLayoutParams(new TableRow.LayoutParams(
+                    0, TableRow.LayoutParams.WRAP_CONTENT, 1.5f
+            ));
+
+
+
             TextView textViewPlace = new TextView(container.getContext());
             String address = ((MainActivity) getActivity()).getAddressFromCoordinate(sUserLatitude, sUserLongitude);
             textViewPlace.setText(address);
             textViewPlace.setGravity(Gravity.CENTER);
             textViewPlace.setTextSize(12);
+            textViewDate.setTextColor(text_color);
+            textViewDate.setBackgroundColor(background_color);
             textViewPlace.setBackgroundResource(R.drawable.table_border);
 
             textViewPlace.setLayoutParams(new TableRow.LayoutParams(
@@ -216,9 +245,6 @@ public class PathHistoryTableFragment extends Fragment {
 
             tableLayout.addView(tableRow);
         }
-
         return root;
     }
-
-
 }
