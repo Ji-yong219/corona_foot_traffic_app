@@ -71,7 +71,7 @@
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:src="@drawable/hospital2"
+                        android:src="@drawable/near_hospital"
                         android:layout_gravity="center"
                         android:background="@drawable/button_round"
                         android:backgroundTint="@color/colorButton"/>
@@ -97,7 +97,7 @@
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:src="@drawable/chart"
+                        android:src="@drawable/confirm_graph"
                         android:layout_gravity="center"
                         android:background="@drawable/button_round"
                         android:backgroundTint="@color/colorButton"/>
@@ -123,7 +123,7 @@
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:src="@drawable/vaccin"
+                        android:src="@drawable/needle"
                         android:layout_gravity="center"
                         android:background="@drawable/button_round"
                         android:backgroundTint="@color/colorButton"/>
