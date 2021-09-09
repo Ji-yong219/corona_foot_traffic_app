@@ -43,29 +43,28 @@ public class LoginActivity extends AppCompatActivity{
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String userID=et_id.getText().toString();
-                String userPass=et_pass.getText().toString();
+                final String userID = et_id.getText().toString();
+                final String userPass = et_pass.getText().toString();
 
-//                setContentView(R.layout.activity_main);
-                Intent intent=new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-                finish();
-
-                /*
 
                 Response.Listener<String> responseListener=new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONObject jasonObject=new JSONObject(response);
-                            boolean success=jasonObject.getBoolean("success");
-                            if (success) {//회원등록 성공한 경우
-                                String userID = jasonObject.getString("userID");
-                                String userPass = jasonObject.getString("userPassword");
+                            System.out.println("response:"+response);
+                            JSONObject jasonObject = new JSONObject(response);
+
+                            boolean success = jasonObject.getBoolean("success");
+
+                            if (success) {//로그인 성공한 경우
+                                String id = jasonObject.getString("id");
+                                String pasword = jasonObject.getString("password");
+
                                 Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
+
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 intent.putExtra("log", "User");
-                                intent.putExtra("userID", userID);
+                                intent.putExtra("id", id);
                                 startActivity(intent);
                             }
 
@@ -80,11 +79,10 @@ public class LoginActivity extends AppCompatActivity{
                         }
                     }
                 };
-                LoginRequest loginRequest=new LoginRequest(userID,userPass,responseListener);
+
+                LoginRequest loginRequest = new LoginRequest(userID, userPass, responseListener);
                 RequestQueue queue= Volley.newRequestQueue(LoginActivity.this);
                 queue.add(loginRequest);
-
-                 */
             }
         });
     }

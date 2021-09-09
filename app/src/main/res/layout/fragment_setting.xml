@@ -126,8 +126,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="2px"
                     android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
-                    />
+                    android:layout_marginBottom="20dp"/>
 
                 <TextView
                     android:id="@+id/infoTextView"
@@ -170,13 +169,14 @@
                 </LinearLayout>
 
                 <Button
-                    android:id="@+id/applyButton"
+                    android:id="@+id/logoutButton"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:background="@color/colorPrimaryBlue"
                     android:layout_marginTop="50dp"
                     android:fadingEdge="horizontal|vertical"
-                    android:text="적용하기"
+                    android:text="로그아웃"
+                    android:onClick="btn_logout"
                     android:textColor="@android:color/white"
                     android:textSize="24sp"
                     android:textStyle="bold" />

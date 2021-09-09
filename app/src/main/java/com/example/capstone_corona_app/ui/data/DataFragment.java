@@ -20,10 +20,12 @@ public class DataFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dataViewModel =
-                ViewModelProviders.of(this).get(DataViewModel.class);
+        dataViewModel = ViewModelProviders.of(this).get(DataViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_data, container, false);
+
         final TextView textView = root.findViewById(R.id.text_data);
+
         dataViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {

@@ -1,5 +1,8 @@
 package com.example.capstone_corona_app.ui.setting;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.capstone_corona_app.LoginActivity;
+import com.example.capstone_corona_app.MainActivity;
 import com.example.capstone_corona_app.R;
 
 public class SettingFragment extends Fragment {
@@ -30,6 +35,8 @@ public class SettingFragment extends Fragment {
                 textView.setText(s);
             }
         });
+
+
         return root;
     }
 }

@@ -49,43 +49,61 @@
             android:id="@+id/contentsLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/topLayout"
-            android:layout_above="@+id/moodLayout" >
+            android:layout_below="@+id/topLayout" >
 
-            <LinearLayout
+            <GridLayout
+                android:id="@+id/gridViewData"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="100dp"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:layout_margin="20dp"
+                android:columnCount="2"
+                android:gravity="center"
+                android:horizontalSpacing="20dp"
+                android:verticalSpacing="30dp">
 
                 <Button
-                    android:id="@+id/WholeButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginRight="30dp"
-                    android:background="@color/colorPrimary"
-                    android:fadingEdge="horizontal|vertical"
-                    android:text="전국"
-                    android:textColor="@android:color/white"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                    android:drawableTop="@drawable/hospital"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="40dp"
+                    android:text="주변 병원"
+                    android:textSize="16dp"
+                    android:radius="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="30dp"
+                    android:singleLine="false"
+                    android:background="@drawable/button_round"
+                    android:backgroundTint="@color/colorButton"/>
 
                 <Button
-                    android:id="@+id/ChungbukButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginRight="30dp"
-                    android:background="@color/colorPrimaryOrange"
-                    android:fadingEdge="horizontal|vertical"
-                    android:text="충청북도"
-                    android:textColor="@android:color/white"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    android:drawableTop="@drawable/hospital"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="40dp"
+                    android:text="실시간 확진자"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="30dp"
+                    android:textSize="16dp"
+                    android:radius="50dp"
+                    android:background="@drawable/button_round"
+                    android:backgroundTint="@color/colorButton"/>
 
+                <Button
+                    android:drawableTop="@drawable/hospital"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="40dp"
+                    android:text="백신 접종"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="30dp"
+                    android:textSize="16dp"
+                    android:radius="50dp"
+                    android:background="@drawable/button_round"
+                    android:backgroundTint="@color/colorButton"/>
+            </GridLayout>
         </RelativeLayout>
 
     </RelativeLayout>
