@@ -785,6 +785,18 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
+    public void reservation_vaccine(View v){
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://ncvr2.kdca.go.kr"));
+        startActivity(intent);
+    }
+    public void view_confirm_count(View v){
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://ncov.mohw.go.kr"));
+        startActivity(intent);
+    }
+    public void go_near_hospital(View v){
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.mohw.go.kr/react/popup_200128.html-국민안심병원리스트"));
+        startActivity(intent);
+    }
 
 
     public void btn_logout(View v){

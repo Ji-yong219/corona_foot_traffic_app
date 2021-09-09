@@ -66,6 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="30dp"
+                    android:onClick="go_near_hospital"
                     android:orientation="vertical">
 
                     <ImageView
@@ -92,6 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="30dp"
+                    android:onClick="view_confirm_count"
                     android:orientation="vertical">
 
                     <ImageView
@@ -118,6 +120,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="30dp"
+                    android:onClick="reservation_vaccine"
                     android:orientation="vertical">
 
                     <ImageView

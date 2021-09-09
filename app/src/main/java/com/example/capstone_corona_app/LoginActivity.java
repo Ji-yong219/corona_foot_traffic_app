@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity{
         btn_register.setOnClickListener(new View.OnClickListener() {//회원가입 버튼을 클릭시 수행
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(LoginActivity.this,RegisterActivity.class);
+                Intent intent=new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });

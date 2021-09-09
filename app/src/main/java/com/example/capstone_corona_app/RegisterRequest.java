@@ -11,19 +11,20 @@ import java.util.Map;
 public class RegisterRequest extends StringRequest{
 
     //서버 url 설정(php파일 연동)
-    final static  private String URL="http://203.252.240.74:20909/Register.php";
+    final static  private String URL="http://203.252.240.74:20909/signup.php";
     private Map<String,String>map;
 
-    public RegisterRequest(String userID, String userPassword, String userName, int userAge,int userHak,String userMajor,Response.Listener<String>listener){
+    public RegisterRequest(String userID, String password, String gender, String name, int birth, String email, String phone,Response.Listener<String>listener){
         super(Method.POST,URL,listener,null);//위 url에 post방식으로 값을 전송
 
         map=new HashMap<>();
-        map.put("userID",userID);
-        map.put("userPassword",userPassword);
-        map.put("userName",userName);
-        map.put("userAge",userAge+"");
-        map.put("userHak",userHak+"");
-        map.put("userMajor",userMajor);
+        map.put("id", userID);
+        map.put("birth", birth+"");
+        map.put("email", email);
+        map.put("phone",phone);
+        map.put("gender",gender);
+        map.put("name", name);
+        map.put("password", password);
     }
 
     @Override
