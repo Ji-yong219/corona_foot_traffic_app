@@ -1,13 +1,18 @@
 package com.example.capstone_corona_app;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +21,7 @@ import com.example.capstone_corona_app.ui.path_history.PathHistoryTableFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -55,6 +61,8 @@ import androidx.core.app.ActivityCompat;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.jsoup.Jsoup;
@@ -519,6 +527,7 @@ public class MainActivity extends AppCompatActivity implements
     public boolean isContact(double venueLat, double venueLng, double userLat, double userLng){
         double latDistance = Math.toRadians(userLat - venueLat);
         double lngDistance = Math.toRadians(userLng - venueLng);
+
         double a = (Math.sin(latDistance / 2) * Math.sin(latDistance / 2)) +
                 (Math.cos(Math.toRadians(userLat))) *
                         (Math.cos(Math.toRadians(venueLat))) *
@@ -528,7 +537,8 @@ public class MainActivity extends AppCompatActivity implements
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         double dist = 6371 * c;
-        if (dist<0.05){ //(in km, you can use 0.1 for metres etc.)
+
+        if (dist*100 < getResources().getInteger(R.integer.contact_range)){ //(in km, you can use 0.1 for metres etc.)
             /* If it's within 10m, we assume we're not moving */
 
             return true;
@@ -558,7 +568,9 @@ public class MainActivity extends AppCompatActivity implements
 
         Boolean bValid = false;
 
-        if (calStart.before (calValue) && calEnd.after(calValue)) {
+//        System.out.println("비교 ㄱㄱ"+calEnd.getTime().toString()+"\t"+calValue.getTime().toString());
+
+        if (calStart.before(calValue) && calEnd.after(calValue)) {
             bValid = true;
         }
 
@@ -779,7 +791,6 @@ public class MainActivity extends AppCompatActivity implements
 
 //    public get
 
-
     public static void insertGPS(double latitude, double longitude){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         long lNow = Long.parseLong( sdf.format( System.currentTimeMillis() ) );
@@ -830,6 +841,7 @@ public class MainActivity extends AppCompatActivity implements
         return sResult;
     }
 
+    @NonNull
     public static ArrayList<String[]> selectDayGPS(String date){
         sqlDB = myDBHelper.getReadableDatabase();
         Cursor cursor;
@@ -878,7 +890,6 @@ public class MainActivity extends AppCompatActivity implements
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             db.execSQL("DROP TABLE IF EXISTS userGPS");
             onCreate(db);
-
         }
     }
 }

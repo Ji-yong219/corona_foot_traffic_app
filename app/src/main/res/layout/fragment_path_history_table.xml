@@ -6,7 +6,12 @@
     android:layout_height="match_parent"
     tools:context="com.example.capstone_corona_app.MainActivity">
 
-
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="none"
+        android:layout_weight="1"
+        tools:ignore="MissingConstraints">
 
     <TableLayout
         android:id="@+id/tablelayout"
@@ -51,6 +56,7 @@
 
         </TableRow>
     </TableLayout>
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

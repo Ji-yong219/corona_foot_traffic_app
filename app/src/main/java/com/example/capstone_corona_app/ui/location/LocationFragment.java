@@ -166,7 +166,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
 
             CircleOverlay circle = new CircleOverlay();
             circle.setCenter(new LatLng(dPlaceLongitude, dPlaceLatitude));
-            circle.setRadius(50);
+            circle.setRadius(getResources().getInteger(R.integer.contact_range));
             circle.setColor(Color.argb(100, 255, 0, 0));
             circle.setMap(naverMap);
         }
