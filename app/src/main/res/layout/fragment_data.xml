@@ -61,48 +61,83 @@
                 android:horizontalSpacing="20dp"
                 android:verticalSpacing="30dp">
 
-                <Button
-                    android:drawableTop="@drawable/hospital"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_margin="40dp"
-                    android:text="주변 병원"
-                    android:textSize="16dp"
-                    android:radius="50dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="30dp"
-                    android:singleLine="false"
-                    android:background="@drawable/button_round"
-                    android:backgroundTint="@color/colorButton"/>
+                    android:orientation="vertical">
 
-                <Button
-                    android:drawableTop="@drawable/hospital"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_margin="40dp"
-                    android:text="실시간 확진자"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="30dp"
-                    android:textSize="16dp"
-                    android:radius="50dp"
-                    android:background="@drawable/button_round"
-                    android:backgroundTint="@color/colorButton"/>
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/hospital2"
+                        android:layout_gravity="center"
+                        android:background="@drawable/button_round"
+                        android:backgroundTint="@color/colorButton"/>
 
-                <Button
-                    android:drawableTop="@drawable/hospital"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@null"
+                        android:text="주변 병원"
+                        android:textSize="24dp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_margin="40dp"
-                    android:text="백신 접종"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="30dp"
-                    android:textSize="16dp"
-                    android:radius="50dp"
-                    android:background="@drawable/button_round"
-                    android:backgroundTint="@color/colorButton"/>
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/chart"
+                        android:layout_gravity="center"
+                        android:background="@drawable/button_round"
+                        android:backgroundTint="@color/colorButton"/>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@null"
+                        android:text="실시간 확진자"
+                        android:textSize="24dp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="40dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/vaccin"
+                        android:layout_gravity="center"
+                        android:background="@drawable/button_round"
+                        android:backgroundTint="@color/colorButton"/>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@null"
+                        android:text="백신 접종"
+                        android:textSize="24dp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
             </GridLayout>
         </RelativeLayout>
 
