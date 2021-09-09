@@ -107,13 +107,21 @@ public class RegisterActivity extends AppCompatActivity{
                 int birth = Integer.parseInt(et_birth.getText().toString());
                 String email = et_email.getText().toString();
                 final String phone = et_phone.getText().toString();
+                final String[] admin = {"0" };
+
+                //  체크박스가 눌렸을 때
+                findViewById(R.id.et_admin).setOnClickListener(new Button.OnClickListener() {
+                    public void onClick(View v) {
+                        admin[0] = Checked(v); // 체크되었을 때 동작코드
+                    }
+                });
 
                 Response.Listener<String> responseListener=new Response.Listener<String>() {//volley
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONObject jasonObject=new JSONObject(response);//Register2 php에 response
-                            boolean success=jasonObject.getBoolean("success");//Register2 php에 sucess
+                            JSONObject jasonObject = new JSONObject(response);//Register2 php에 response
+                            boolean success = jasonObject.getBoolean("success");//Register2 php에 sucess
 //                            if(userPass.equals(PassCk)) {
                                 if (success) {//회원등록 성공한 경우
                                     Toast.makeText(getApplicationContext(), "회원 등록 성공", Toast.LENGTH_SHORT).show();
@@ -131,10 +139,27 @@ public class RegisterActivity extends AppCompatActivity{
                     }
                 };
                 //서버로 volley를 이용해서 요청을 함
-                RegisterRequest registerRequest=new RegisterRequest(userID, password, gender, name, birth, email, phone, responseListener);
+                RegisterRequest registerRequest=new RegisterRequest(userID, password, gender, name, birth, email, phone, admin[0], responseListener);
                 RequestQueue queue= Volley.newRequestQueue(RegisterActivity.this);
                 queue.add(registerRequest);
             }
         });
+    }
+
+
+    public String Checked(View v) { // 체크되었을 때 동작할 메소드 구현
+        // TODO Auto-generated method stub
+        CheckBox option = (CheckBox) findViewById(R.id.et_admin); // option1체크박스
+        // 선언
+
+        String resultText = ""; // 체크되었을 때 값을 저장할 스트링 값
+        if (option.isChecked()) { // option1 이 체크되었다면
+            resultText = "1";
+        }
+        else{
+            resultText = "0";
+        }
+
+        return resultText; // 체크된 값 리턴
     }
 }
