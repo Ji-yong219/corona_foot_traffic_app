@@ -53,6 +53,13 @@
             android:layout_above="@+id/moodLayout" >
 
 
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:scrollbars="none"
+                android:layout_weight="1"
+                tools:ignore="MissingConstraints">
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -66,16 +73,13 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <CheckBox
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"/>
 
                     <TextView
                         android:id="@+id/gps"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
-                        android:text="INFORMATION"
+                        android:text=""
                         android:textSize="22dp"
                         android:textStyle="bold"
                         android:textColor="#0c0c0c" />
@@ -88,7 +92,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_centerInParent="true"
-                    android:text="위치 정보는 개인의 휴대폰에 보관되며 14일이후 자동으로 삭제됩니다. 서비스 내의 위치 정보는 암호화되어 사용되어 공개되지 않습니다."
+                    android:text="공개 SW 문제 해결플랫폼을 위한 임시 서비스 앱입니다. *현재는 충청북도를 중심으로 서비스를 진행 중입니다* "
                     android:textSize="18dp"
                     android:textColor="#0c0c0c" />
 
@@ -135,7 +139,8 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_centerInParent="true"
-                    android:text="*충북 코로나 동선 안심이는 현재 충청북도를 중심으로 시범 서비스를 제공중입니다.*"
+                    android:text="공개 SW 문제 해결플랫폼을 위한 임시 서비스 앱 입니다
+*현재는 충청북도를 중심으로 서비스를 진행 중입니다*  향후 더 많은 지역에 서비스 제공예정"
                     android:textSize="18dp"
                     android:textColor="#0c0c0c" />
 
@@ -181,6 +186,8 @@
                     android:textSize="24sp"
                     android:textStyle="bold" />
             </LinearLayout>
+
+            </ScrollView>
 
         </RelativeLayout>
 

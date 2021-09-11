@@ -7,12 +7,6 @@
     tools:context="com.example.capstone_corona_app.MainActivity">
 
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scrollbars="none"
-        android:layout_weight="1"
-        tools:ignore="MissingConstraints">
         <EditText
             android:id="@+id/et_phone"
             android:layout_width="200dp"
@@ -140,7 +134,5 @@
                 app:layout_constraintStart_toStartOf="@+id/btn_login"
                 app:layout_constraintTop_toBottomOf="@+id/btn_login" />
         </LinearLayout>
-    </ScrollView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

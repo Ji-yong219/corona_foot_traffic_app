@@ -527,6 +527,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public boolean isContact(double venueLat, double venueLng, double userLat, double userLng){
+//        System.out.print("venueLat:"+venueLat);
+//        System.out.println("\tvenueLng:"+venueLng);
+//        System.out.print("userLat:"+userLat);
+//        System.out.println("\tuserLng:"+userLng);
+//        System.out.println("\n");
+
         double latDistance = Math.toRadians(userLat - venueLat);
         double lngDistance = Math.toRadians(userLng - venueLng);
 
@@ -539,6 +545,8 @@ public class MainActivity extends AppCompatActivity implements
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         double dist = 6371 * c;
+
+//        System.out.println(dist*100+"<"+getResources().getInteger(R.integer.contact_range));
 
         if (dist*100 < getResources().getInteger(R.integer.contact_range)){ //(in km, you can use 0.1 for metres etc.)
             /* If it's within 10m, we assume we're not moving */
@@ -911,7 +919,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public class myDBHelper extends SQLiteOpenHelper {
         public myDBHelper(Context context) {
-            super(context, "capstoneDB", null, 1);
+            super(context, "capstoneDB_SJ", null, 1);
         }
 
         @Override

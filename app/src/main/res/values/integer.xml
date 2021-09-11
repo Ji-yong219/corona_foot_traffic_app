@@ -1,4 +1,4 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <integer name="contact_range">50</integer>
+    <integer name="contact_range">100</integer>
 </resources>

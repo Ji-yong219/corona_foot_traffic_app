@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -20,14 +21,16 @@ import org.json.JSONObject;
 public class LoginActivity extends AppCompatActivity{
     private EditText et_id, et_pass;
     private Button btn_login,btn_register;
+    private CheckBox admin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        et_id=findViewById(R.id.et_id);
-        et_pass=findViewById(R.id.et_pass);
+        et_id = findViewById(R.id.et_id);
+        et_pass = findViewById(R.id.et_pass);
+//        admin = findViewById(R.id.et_admin);
         btn_login=findViewById(R.id.btn_login);
         btn_register=findViewById(R.id.btn_register);
 
@@ -45,6 +48,7 @@ public class LoginActivity extends AppCompatActivity{
             public void onClick(View v) {
                 final String userID = et_id.getText().toString();
                 final String userPass = et_pass.getText().toString();
+//                final String admin = admin.getText().toString();
 
 
                 Response.Listener<String> responseListener=new Response.Listener<String>() {
@@ -52,19 +56,23 @@ public class LoginActivity extends AppCompatActivity{
                     public void onResponse(String response) {
                         try {
                             System.out.println("response:"+response);
-                            JSONObject jasonObject = new JSONObject(response);
+//                            JSONObject jasonObject = new JSONObject(response);
+                            JSONObject jasonObject = new JSONObject("{'success':'true'}");
 
                             boolean success = jasonObject.getBoolean("success");
+                            success = true;
 
                             if (success) {//로그인 성공한 경우
-                                String id = jasonObject.getString("id");
-                                String pasword = jasonObject.getString("password");
+//                                String id = jasonObject.getString("id");
+//                                String pasword = jasonObject.getString("password");
+//                                String admin = jasonObject.getString("admin");
 
                                 Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
 
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.putExtra("log", "User");
-                                intent.putExtra("id", id);
+//                                intent.putExtra("log", "User");
+//                                intent.putExtra("id", id);
+//                                intent.putExtra("admin", admin);
                                 startActivity(intent);
                             }
 
