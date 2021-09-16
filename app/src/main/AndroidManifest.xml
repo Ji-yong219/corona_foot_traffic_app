@@ -21,7 +21,7 @@
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="rxdq4nw0ue" />
+            android:value="xxxxxxx />
         <activity android:name="com.example.capstone_corona_app.SplashActivity"
             android:theme="@style/SplashTheme">
         </activity>
